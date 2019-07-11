@@ -3,31 +3,25 @@
 <title>CMS</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" src="images/favicon.ico">
+<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#config-web-app -->
-
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
 <script>
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
+  // Initialize Firebase
+  var config = {
     apiKey: "AIzaSyCEnT75xEO_ulN2mY7Q3BCFn-KC7ZOR6KY",
     authDomain: "aftaas-d63e6.firebaseapp.com",
     databaseURL: "https://aftaas-d63e6.firebaseio.com",
     projectId: "aftaas-d63e6",
     storageBucket: "",
     messagingSenderId: "291293621730",
-    appId: "1:291293621730:web:f388d0588f9570e9"
   };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(config);
 </script>
+
 
 <style>
 body,h1 {font-family: "Raleway", Arial, sans-serif}

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<title>CMS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCEnT75xEO_ulN2mY7Q3BCFn-KC7ZOR6KY",
+    authDomain: "aftaas-d63e6.firebaseapp.com",
+    databaseURL: "https://aftaas-d63e6.firebaseio.com",
+    projectId: "aftaas-d63e6",
+    storageBucket: "",
+    messagingSenderId: "291293621730",
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+  var config = {
+    // ...
+  };
+  firebase.initializeApp(config);
+
+</script>
+
+
+<head lang="en">
+
+  <style>
+    body, form, span, select, input, textarea { font-family: 'Open Sans', sans-serif; font-size: 14px; }
+    html { margin: 0; padding: 0; width: 100%; }
+    form, body { margin-left: auto; margin-right: auto; max-width: 1000px; }
+    span { display: block; margin: 5px 0; overflow: auto; padding: 0 1%; width: 98%; } .related { width: 50%; float: left; overflow: auto; }
+    fieldset { display: block; margin: 0; padding: 1%; width: calc(98% - 4px); border: 2px groove #bbb; }
+    textarea { width: calc(100% - 14px); padding: 5px; border: 2px groove #bbb; }
+    input, select, btn { float: right; }
+    select { width: 162px; }
+    input[type='checkbox'],
+    input[type='radio'] { float: left; margin-right: 10px; }
+    input[type='submit'] { float: left; margin: 10px 0; padding: 10px 40px; }
+    input[type='submit'],
+    fieldset, textarea { border-radius: 5px; }
+     @media screen and (max-width: 760px) { .related { width: 100%; }
+    input[type='text'],
+    input[type='number'],
+    input[type='date'],
+    input[type='tel'],
+    input[type='email'],
+    select { width: 400px; } } @media screen and (max-width: 670px) {
+    input[type='text'],
+    input[type='number'],
+    input[type='date'],
+    input[type='tel'],
+    input[type='email'],
+    select { width: calc(100% - 4px); } }
+  </style>
+
+</head>
+
+<body>
+  <h1>Claim Form</h1>
+
+  <form>
+    <div class="related">
+      <span>Name : <input type="text" id="cName" name="name" disabled></span>
+      <span>I/C Number : <input type="text" id="cIC" name="icNumber" disabled></span>
+      <span>Phone : <input type="tel" id="cPhone" name="phone" disabled></span>
+    </div>
+
+    <div class="related">
+      <span>Address : <input type="text" id="cAddress" name="address" disabled></span>
+      <span>Initial : <input type="text" id="cInitial" name="initial" disabled></span>
+      <span>Date : <input type="text" id="cDate" name="date" disabled></span>
+      <span>Reference : <input type="text" id="cRef" name="reference" disabled></span>
+    </div>
+
+     <fieldset>
+       <legend>| 1. MILEAGE |</legend>
+       <p>Calculation : ___ km x RM ___ x ___ trip(s) x ___ day(s)
+         <btn onclick="document.getElementById('id01').style.display='block'" style="width:auto;" type="btn" class="w3-button"> <i class="fa fa-pencil-square-o"></i></btn> </p>
+
+       <table id="milage-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+         <tr>
+           <td width="10%"><b>Date</b></td>
+           <td width="15%"><b>Client Name</b></td>
+           <td width="15%"><b>From (Full Address)</b></td>
+           <td width="15%"><b>To (Full Address)</b></td>
+           <td width="5%"><b>KM</b></td>
+           <td width="5%"><b>RM</b></td>
+           <td width="5%"><b>Trip</b></td>
+           <td width="5%"><b>Day</b></td>
+           <td width="10%"><b>Amount</b></td>
+           <td width="5%"><b>Delete</b></td>
+         </tr>
+       </table>
+       <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+    </fieldset><br>
+
+    <fieldset>
+      <legend>| 2. OUTSTATION |</legend>
+        <btn onclick="document.getElementById('id02').style.display='block'" style="width:auto;" type="btn" class="w3-button"> <i class="fa fa-pencil-square-o"></i></btn>
+
+      <table id="outstation-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+        <tr>
+          <td width="10%"><b>Date</b></td>
+          <td width="20%"><b>Client</b></td>
+          <td width="15%"><b>From</b></td>
+          <td width="15%"><b>To</b></td>
+          <td width="10%"><b>Amount</b></td>
+          <td width="5%"><b>Delete</b></td>
+        </tr>
+      </table>
+      <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+   </fieldset><br>
+
+   <fieldset>
+     <legend>| 3. OTHERS |</legend>
+       <btn onclick="document.getElementById('id03').style.display='block'" style="width:auto;" type="btn" class="w3-button"> <i class="fa fa-pencil-square-o"></i></btn>
+
+     <table id="outstation-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+       <tr>
+         <td width="10%"><b>Date</b></td>
+         <td width="20%"><b>Particulars</b></td>
+         <td width="10%"><b>Amount</b></td>
+         <td width="5%"><b>Delete</b></td>
+       </tr>
+     </table>
+     <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+  </fieldset>
+
+         <p>Extra Information</p>
+         <textarea placeholder="State here..." rows="6" name="comments"></textarea>
+         <span><input type="submit"></span>
+
+         <script>
+
+         var idStaff;
+         var icStaff;
+         var nameStaff;
+         var phoneStaff;
+         var addressStaff;
+         var initialStaff;
+         var claimReference;
+
+         function getUrlVars() {
+           var vars = {};
+           var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+             vars[key] = value;
+           });
+           return vars;
+         }
+         idStaff = getUrlVars()["idS"];
+         claimReference = getUrlVars()["refC"];
+
+
+         var today = new Date();
+         var dd = String(today.getDate()).padStart(2, '0');
+         var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+         var mm = months[today.getMonth()];
+         var yyyy = today.getFullYear();
+         today = dd + '-' + mm + '-' + yyyy;
+
+
+         var databaseRef = firebase.database().ref('staff');
+
+         databaseRef.once('value', function(snapshot){
+           snapshot.forEach(function(childSnapshot) {
+             var childKey = childSnapshot.key;
+             var childData = childSnapshot.val();
+
+             icStaff = childData.icNumber;
+
+             if(icStaff == idStaff){
+               nameStaff  = childData.name;
+               phoneStaff  = childData.phone;
+               addressStaff  = childData.address;
+               initialStaff  = childData.initial;
+             }
+           });
+        document.getElementById("cName").value = nameStaff;
+        document.getElementById("cIC").value = idStaff;
+        document.getElementById("cPhone").value = phoneStaff;
+        document.getElementById("cAddress").value = addressStaff;
+        document.getElementById("cInitial").value = initialStaff;
+        document.getElementById("cDate").value = today;
+        document.getElementById("cRef").value = claimReference;
+        //pIBP.innerText = nameStaff;
+
+        });
+
+
+        var tbp = document.getElementById('milage-table');
+        var rowIndex = 1;
+        var databaseRef = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/mileage');
+
+          databaseRef.once('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot) {
+              var childKey = childSnapshot.key;
+              var childData = childSnapshot.val();
+
+              var row = tbp.insertRow(rowIndex);
+              var cellDate = row.insertCell(0);
+              var cellCN = row.insertCell(1);
+              var cellFrom = row.insertCell(2);
+              var cellTo = row.insertCell(3);
+              var cellKM = row.insertCell(4);
+              var cellRM = row.insertCell(5);
+              var cellTrip = row.insertCell(6);
+              var cellDay = row.insertCell(7);
+              var cellAmount = row.insertCell(8);
+              var cellDelete = row.insertCell(9);
+
+              cellDate.appendChild(document.createTextNode(childData.date));
+              cellCN.appendChild(document.createTextNode(childData.client_name));
+              cellFrom.appendChild(document.createTextNode(childData.from_a));
+              cellTo.appendChild(document.createTextNode(childData.to_a));
+              cellKM.appendChild(document.createTextNode(childData.km));
+              cellRM.appendChild(document.createTextNode(childData.rm));
+              cellTrip.appendChild(document.createTextNode(childData.trip));
+              cellDay.appendChild(document.createTextNode(childData.day));
+              var amntRM = 'RM' + childData.amount;
+              cellAmount.appendChild(document.createTextNode(amntRM));
+
+              var rowID = childData.id;
+
+              var btn = document.createElement('input');
+              btn.type = "button";
+              btn.className = "btn";
+              btn.value = "DEL";
+              btn.onclick = (function(rowID) {return function() {deleteRow(rowID);}})(rowID);
+              cellDelete.appendChild(btn);
+
+              rowIndex = rowIndex + 1;
+            });
+          });
+
+         </script>
+
+       </form>
+
+
+
+     </body>
+
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  body {font-family: Arial, Helvetica, sans-serif;}
+
+  /* Full-width input fields */
+  input[type=textF] {
+    padding: 10px 15px;
+    margin: 5px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  input[type=numberF], input[type=date], select{
+      padding: 10px 15px;
+      margin: 5px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+
+  /* Set a style for all buttons */
+  button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+  }
+
+  button:hover {
+      opacity: 0.8;
+  }
+
+  /* Extra styles for the cancel button */
+  .cancelbtn {
+      width: auto;
+      padding: 10px 18px;
+      background-color: #f44336;
+  }
+
+  /*the position the close button */
+  .container {
+      padding: 10px;
+  }
+
+  span.psw {
+      float: right;
+      padding-top: 16px;
+  }
+
+  /* The Modal (background) */
+  .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 30%; /*Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      padding-top: 30px;
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+  }
+
+  /* The Close Button (x) */
+  .close {
+      position: absolute;
+      right: 25px;
+      top: 0;
+      color: #000;
+      font-size: 35px;
+      font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+      color: red;
+      cursor: pointer;
+  }
+
+  /* Add Zoom Animation */
+  .animate {
+      -webkit-animation: animatezoom 0.6s;
+      animation: animatezoom 0.6s
+  }
+
+  @-webkit-keyframes animatezoom {
+      from {-webkit-transform: scale(0)}
+      to {-webkit-transform: scale(1)}
+  }
+
+  @keyframes animatezoom {
+      from {transform: scale(0)}
+      to {transform: scale(1)}
+  }
+
+  /* Change styles for span and cancel button on extra small screens */
+  @media screen and (max-width: 300px) {
+      span.psw {
+         display: block;
+         float: none;
+      }
+      .cancelbtn {
+         width: 100%;
+      }
+  }
+
+  </style>
+  </head>
+  <body>
+
+  <div id="id01" class="modal">
+    <form class="modal-content animate">
+     <div class="container">
+       <span>Date : <input type="date" id="fDate1" name="date" required></span>
+       <span>Client Name : <input type="textF" id="fCN1" name="icNumber" required></span>
+       <span>From : <input type="textF" id="fFrom1" name="phone" required></span>
+       <span>To : <input type="textF" id="fTo1" name="phone" required></span>
+       <span>KM : <input type="numberF" id="fKM1" name="phone" required></span>
+       <span>Type :
+         <select name="vehicle" id="fType1">
+           <option value=0.8>Car (RM0.80)</option>
+           <option value=0.3>Motorcycle (RM0.30)</option>
+         </select>
+       </span>
+       <span>Trip : <input type="numberF" id="fTrip1" name="fTrip1" required></span>
+       <span>Day : <input type="numberF" id="fDay1" name="fDay1" required></span>
+       <button type="submit" onclick="save_info();">ADD</button>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+
+  function save_info(){
+
+    var sdate = document.getElementById('fDate1').value;
+    var scn = document.getElementById('fCN1').value;
+    var sfrom = document.getElementById('fFrom1').value;
+    var sto = document.getElementById('fTo1').value;
+    var skm = document.getElementById('fKM1').value;
+    var stype = document.getElementById('fType1').value;
+    var strip = document.getElementById('fTrip1').value;
+    var sday = document.getElementById('fDay1').value;
+    var sID = document.getElementById('cIC').value;
+    var cRef = document.getElementById('cRef').value;
+    var rKey = firebase.database().ref('claim/'+ sID +'/'+ cRef).push().key;
+
+    var samount = skm * stype * strip * sday;
+
+     var data = {
+       id: rKey,
+       date: sdate,
+       client_name: scn,
+       from_a: sfrom,
+       to_a: sto,
+       km: skm,
+       rm: stype,
+       trip: strip,
+       day: sday,
+       amount: samount
+     }
+
+     var updates = {};
+     updates['/claim/'+ sID +'/'+ cRef +'/mileage/'+ rKey] = data;
+     var databaseRef2 = firebase.database().ref().update(updates);
+     alert('Data added!');
+     reload_page();
+   }
+
+   function reload_page(){
+     window.location.reload();
+   }
+
+  // Get the modal
+  var modal = document.getElementById('id01');
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
+  </script>
+
+
+
+</html>

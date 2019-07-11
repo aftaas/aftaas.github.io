@@ -1,0 +1,29 @@
+Claim Management System
+
+
+
+untuk login - admin(key in data staff, claim) & manager(approve)
+
+
+
+bila admin login - 
+
+	1)masukkan semua basic data staff - (nama, alamat, ic no(12digit), initial(id staff-3alphabetCapital), tarikh kerja, no phone)
+
+	2)if staff nak claim, admin masukkan initial num, then proceed form
+                   
+	3)dalam form tu ada template (nanti i bagi)
+		   
+	4)boleh claim: 
+		a)mileage-car(0.80cent,perKM) and tol(refer resit)-gain from staff manually
+                                  
+		b)allowance
+                                  
+		c)others
+                   
+	5)dah complete tu akan ada satu list out confirmation claim utk bulan tu dari semua staff - summary
+
+
+
+bila manager login(end of month) - 
+	approve claim and proceed to HQ

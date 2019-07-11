@@ -54,9 +54,6 @@
     <img class="w3-image" src="images/af-par-4.jpg" alt="Logo" width="20%">
     <h3><b>CLAIM MANAGEMENT SYSTEM</b></h3>
 
-  <!-- Leave out Storage -->
-  <!-- <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-storage.js"></script> -->
-
   <script>
     var config = {
       // ...
@@ -281,11 +278,17 @@
        <label for="finitial"><b>INITIAL</b></label>
        <input type="text" id="fInitial" placeholder="Enter initial" name="finitial" required><br>
        <label for="fic"><b>I/C Number</b></label>
-       <input type="number" id="fIC" placeholder="Enter I/C number" name="fic" required>
+       <input type="number" id="fIC" placeholder="Enter I/C number" name="fic" required><br>
        <label for="fwdate"><b>Working Date</b></label>
-       <input type="date" id="fWDate" placeholder="Select Date" name="fwdate" required>
+       <input type="date" id="fWDate" placeholder="Select Date" name="fwdate" required><br>
        <label for="fphone"><b>Phone Number</b></label>
-       <input type="number" id="fPhone" placeholder="Enter Phone number" name="fphone" required>
+       <input type="number" id="fPhone" placeholder="Enter Phone number" name="fphone" required><br>
+       <label for="fposition"><b>Position</b></label>
+       <select name = "fposition" id ="fPosition">
+            <option value = "Staff" selected>Staff</option>
+            <option value = "Admin">Admin</option>
+            <option value = "Manager">Manager</option>
+         </select><br><br>
        <button type="submit" onclick="save_info();">Submit</button>
       </div>
       <div class="container" style="background-color:#f1f1f1">
@@ -304,6 +307,7 @@
     var sic = document.getElementById('fIC').value;
     var swdate = document.getElementById('fWDate').value;
     var sphone = document.getElementById('fPhone').value;
+    var sposition = document.getElementById('fPosition').value;
 
      var data = {
        name: sname,
@@ -311,7 +315,8 @@
        initial: sinitial,
        icNumber: sic,
        workingDate: swdate,
-       phone: sphone
+       phone: sphone,
+       position: sposition
      }
 
      var updates = {};
@@ -335,9 +340,6 @@
       }
   }
   </script>
-
-
-
 
 
 <!-- Footer -->

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<title>CMS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCEnT75xEO_ulN2mY7Q3BCFn-KC7ZOR6KY",
+    authDomain: "aftaas-d63e6.firebaseapp.com",
+    databaseURL: "https://aftaas-d63e6.firebaseio.com",
+    projectId: "aftaas-d63e6",
+    storageBucket: "",
+    messagingSenderId: "291293621730",
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+  var config = {
+    // ...
+  };
+  firebase.initializeApp(config);
+
+</script>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #3e8e41;
+}
+
+#myInput {
+  box-sizing: border-box;
+  background-image: url('searchicon.png');
+  background-position: 14px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  padding: 14px 20px 12px 45px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+#myInput:focus {outline: 3px solid #ddd;}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f6f6f6;
+  min-width: 230px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    color: black;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+</style>
+</head>
+
+<body>
+
+  <div class="w3-container w3-light w3-center" style="padding:100px 20px" id="training">
+    <img class="w3-image" src="images/aftaas.jpg" alt="Logo" width="150px">
+    <h3><b>CLAIM FORM</b></h3>
+
+    <div class="dropdown">
+    <button onclick="myFunction()" class="dropbtn">SEARCH</button>
+    <div id="myDropdown" class="dropdown-content">
+      <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+    </div>
+  </div>
+</div>
+
+
+<div class="w3-container">
+  <br>
+  <table id="pt-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+    <tr>
+      <td width="20%"><b>Name</b></td>
+      <td width="20%"><b>I/C No</b></td>
+      <td width="10%"><b>Initial</b></td>
+      <td width="10%"><b>Phone No</b></td>
+      <td width="10%"><b>Claim</b></td>
+    </tr>
+  </table>
+
+  <script>
+
+    var tbp = document.getElementById('pt-table');
+    var rowIndex = 1;
+    var databaseRef = firebase.database().ref('staff');
+
+      databaseRef.once('value', function(snapshot){
+      snapshot.forEach(function(childSnapshot) {
+          var childKey = childSnapshot.key;
+          var childData = childSnapshot.val();
+
+          var row = tbp.insertRow(rowIndex);
+          var cellName = row.insertCell(0);
+          var cellIC = row.insertCell(1);
+          var cellInitial = row.insertCell(2);
+          var cellPhoneNo = row.insertCell(3);
+          var cellClaim = row.insertCell(4);
+
+          cellName.appendChild(document.createTextNode(childData.name));
+          cellIC.appendChild(document.createTextNode(childData.icNumber));
+          cellInitial.appendChild(document.createTextNode(childData.initial));
+          cellPhoneNo.appendChild(document.createTextNode(childData.phone));
+
+          var staffID = childData.icNumber;
+
+          var btn = document.createElement('input');
+          btn.type = "button";
+          btn.className = "btn";
+          btn.value = "CREATE";
+          btn.onclick = (function(staffID) {return function() {createClaim(staffID);}})(staffID);
+          cellClaim.appendChild(btn);
+
+          rowIndex = rowIndex + 1;
+        });
+      });
+
+      function createClaim(x) {
+          var value1=x;
+          var date = new Date();
+          var timestamp = date.getTime();
+          var value2= 's_a_' + timestamp;
+          var queryString = "?idS=" + value1 + "&refC=" + value2;
+          var url = 'form.html?'+ queryString;
+          window.open(url, '_blank').focus();
+
+      }
+
+      function reload_page(){
+       window.location.reload();
+      }
+</script>
+
+</div>
+
+
+
+
+</head>
+<body>
+
+
+      <br><br>
+
+  <script>
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function filterFunction() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("myDropdown");
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
+</script>
+
+
+</body>
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding">
+    <p>&copy; 2019<br>By Nuranisha</p>
+</footer>
+
+
+</html>
