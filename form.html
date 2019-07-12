@@ -125,7 +125,7 @@
      <legend>| 3. OTHERS |</legend>
        <btn onclick="document.getElementById('id03').style.display='block'" style="width:auto;" type="btn" class="w3-button"> <i class="fa fa-pencil-square-o"></i></btn>
 
-     <table id="outstation-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+     <table id="others-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
        <tr>
          <td width="10%"><b>Date</b></td>
          <td width="20%"><b>Particulars</b></td>
@@ -197,7 +197,7 @@
         });
 
 
-        var tbp = document.getElementById('milage-table');
+        var tbm = document.getElementById('milage-table');
         var rowIndex = 1;
         var databaseRef = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/mileage');
 
@@ -206,7 +206,7 @@
               var childKey = childSnapshot.key;
               var childData = childSnapshot.val();
 
-              var row = tbp.insertRow(rowIndex);
+              var row = tbm.insertRow(rowIndex);
               var cellDate = row.insertCell(0);
               var cellCN = row.insertCell(1);
               var cellFrom = row.insertCell(2);
@@ -241,6 +241,76 @@
               rowIndex = rowIndex + 1;
             });
           });
+
+          var tbos = document.getElementById('outstation-table');
+          var rowIndex2 = 1;
+          var databaseRef2 = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/outstation');
+
+            databaseRef2.once('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot) {
+                var childKey = childSnapshot.key;
+                var childData = childSnapshot.val();
+
+                var row = tbos.insertRow(rowIndex2);
+                var cellDate = row.insertCell(0);
+                var cellClient = row.insertCell(1);
+                var cellFrom = row.insertCell(2);
+                var cellTo = row.insertCell(3);
+                var cellAmount = row.insertCell(4);
+                var cellDelete = row.insertCell(5);
+
+                cellDate.appendChild(document.createTextNode(childData.date));
+                cellClient.appendChild(document.createTextNode(childData.client));
+                cellFrom.appendChild(document.createTextNode(childData.from));
+                cellTo.appendChild(document.createTextNode(childData.to));
+                var amntRM = 'RM' + childData.amount;
+                cellAmount.appendChild(document.createTextNode(amntRM));
+
+                var rowID = childData.id;
+
+                var btn = document.createElement('input');
+                btn.type = "button";
+                btn.className = "btn";
+                btn.value = "DEL";
+                btn.onclick = (function(rowID) {return function() {deleteRow2(rowID);}})(rowID);
+                cellDelete.appendChild(btn);
+
+                rowIndex2 = rowIndex2 + 1;
+              });
+            });
+
+            var tbot = document.getElementById('others-table');
+            var rowIndex3 = 1;
+            var databaseRef3 = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/others');
+
+              databaseRef3.once('value', function(snapshot){
+              snapshot.forEach(function(childSnapshot) {
+                  var childKey = childSnapshot.key;
+                  var childData = childSnapshot.val();
+
+                  var row = tbot.insertRow(rowIndex3);
+                  var cellDate = row.insertCell(0);
+                  var cellParticulars = row.insertCell(1);
+                  var cellAmount = row.insertCell(2);
+                  var cellDelete = row.insertCell(3);
+
+                  cellDate.appendChild(document.createTextNode(childData.date));
+                  cellParticulars.appendChild(document.createTextNode(childData.particulars));
+                  var amntRM = 'RM' + childData.amount;
+                  cellAmount.appendChild(document.createTextNode(amntRM));
+
+                  var rowID = childData.id;
+
+                  var btn = document.createElement('input');
+                  btn.type = "button";
+                  btn.className = "btn";
+                  btn.value = "DEL";
+                  btn.onclick = (function(rowID) {return function() {deleteRow3(rowID);}})(rowID);
+                  cellDelete.appendChild(btn);
+
+                  rowIndex3 = rowIndex3 + 1;
+                });
+              });
 
          </script>
 
@@ -376,6 +446,7 @@
   <div id="id01" class="modal">
     <form class="modal-content animate">
      <div class="container">
+       <label><b>1. MILEAGE</b></label>
        <span>Date : <input type="date" id="fDate1" name="date" required></span>
        <span>Client Name : <input type="textF" id="fCN1" name="icNumber" required></span>
        <span>From : <input type="textF" id="fFrom1" name="phone" required></span>
@@ -397,6 +468,38 @@
     </form>
   </div>
 
+  <div id="id02" class="modal">
+    <form class="modal-content animate">
+     <div class="container">
+       <label><b>2. OUTSTATION</b></label>
+       <span>Date : <input type="date" id="fDate2" name="date2" required></span>
+       <span>Client : <input type="textF" id="fC2" name="client2" required></span>
+       <span>From : <input type="textF" id="fFrom2" name="from2" required></span>
+       <span>To : <input type="textF" id="fTo2" name="to2" required></span>
+       <span>Amount : <input type="numberF" id="fAmount2" name="amount2" required></span>
+       <button type="submit" onclick="save_info2();">ADD</button>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="id03" class="modal">
+    <form class="modal-content animate">
+     <div class="container">
+       <label><b>3. OTHERS</b></label>
+       <span>Date : <input type="date" id="fDate3" name="date3" required></span>
+       <span>Particulars : <input type="textF" id="fParticular3" name="particular3" required></span>
+       <span>Amount : <input type="numberF" id="fAmount3" name="amount3" required></span>
+       <button type="submit" onclick="save_info3();">ADD</button>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="document.getElementById('id03').style.display='none'" class="cancelbtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
   <script>
 
   function save_info(){
@@ -411,7 +514,7 @@
     var sday = document.getElementById('fDay1').value;
     var sID = document.getElementById('cIC').value;
     var cRef = document.getElementById('cRef').value;
-    var rKey = firebase.database().ref('claim/'+ sID +'/'+ cRef).push().key;
+    var rKey = firebase.database().ref('claim/'+ sID +'/'+ cRef +'/mileage').push().key;
 
     var samount = skm * stype * strip * sday;
 
@@ -435,16 +538,78 @@
      reload_page();
    }
 
+   function save_info2(){
+
+     var sdate = document.getElementById('fDate2').value;
+     var sclient = document.getElementById('fC2').value;
+     var sfrom = document.getElementById('fFrom2').value;
+     var sto = document.getElementById('fTo2').value;
+     var samount = document.getElementById('fAmount2').value;
+     var sID = document.getElementById('cIC').value;
+     var cRef = document.getElementById('cRef').value;
+     var rKey = firebase.database().ref('claim/'+ sID +'/'+ cRef +'/outstation').push().key;
+
+      var data = {
+        id: rKey,
+        date: sdate,
+        client: sclient,
+        from: sfrom,
+        to: sto,
+        amount: samount
+      }
+
+      var updates = {};
+      updates['/claim/'+ sID +'/'+ cRef +'/outstation/'+ rKey] = data;
+      firebase.database().ref().update(updates);
+      alert('Data added!');
+      reload_page();
+    }
+
+    function save_info3(){
+
+      var sdate = document.getElementById('fDate3').value;
+      var sparticular = document.getElementById('fParticular3').value;
+      var samount = document.getElementById('fAmount3').value;
+      var sID = document.getElementById('cIC').value;
+      var cRef = document.getElementById('cRef').value;
+      var rKey = firebase.database().ref('claim/'+ sID +'/'+ cRef +'/others').push().key;
+
+       var data = {
+         id: rKey,
+         date: sdate,
+         particulars: sparticular,
+         amount: samount
+       }
+
+       var updates = {};
+       updates['/claim/'+ sID +'/'+ cRef +'/others/'+ rKey] = data;
+       firebase.database().ref().update(updates);
+       alert('Data added!');
+       reload_page();
+     }
+
    function reload_page(){
      window.location.reload();
    }
 
   // Get the modal
   var modal = document.getElementById('id01');
+  var modal2 = document.getElementById('id02');
+  var modal3 = document.getElementById('id03');
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
       if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
+  window.onclick = function(event) {
+      if (event.target == modal2) {
+          modal.style.display = "none";
+      }
+  }
+  window.onclick = function(event) {
+      if (event.target == modal3) {
           modal.style.display = "none";
       }
   }
