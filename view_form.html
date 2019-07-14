@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<title>CMS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCEnT75xEO_ulN2mY7Q3BCFn-KC7ZOR6KY",
+    authDomain: "aftaas-d63e6.firebaseapp.com",
+    databaseURL: "https://aftaas-d63e6.firebaseio.com",
+    projectId: "aftaas-d63e6",
+    storageBucket: "",
+    messagingSenderId: "291293621730",
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+  var config = {
+    // ...
+  };
+  firebase.initializeApp(config);
+
+</script>
+
+
+<head lang="en">
+
+  <style>
+    body, form, span, select, input, textarea { font-family: 'Open Sans', sans-serif; font-size: 14px; }
+    html { margin: 0; padding: 0; width: 100%; }
+    form, body { margin-left: auto; margin-right: auto; max-width: 1000px; }
+    span { display: block; margin: 5px 0; overflow: auto; padding: 0 1%; width: 98%; } .related { width: 50%; float: left; overflow: auto; }
+    span2 { float: right; display: block; margin: 5px 10px; padding: 0 1%;}
+    fieldset { display: block; margin: 0; padding: 1%; width: calc(98% - 4px); border: 2px groove #bbb; }
+    textarea { width: calc(100% - 14px); padding: 5px; border: 2px groove #bbb; }
+    input, select, btn { float: right; }
+    select { width: 162px; }
+    input[type='checkbox'],
+    input[type='radio'] { float: left; margin-right: 10px; }
+    input[type='submit'] { float: left; margin: 10px 0; padding: 10px 40px; }
+    input[type='submit'],
+    fieldset, textarea { border-radius: 5px; }
+     @media screen and (max-width: 760px) { .related { width: 100%; }
+    input[type='text'],
+    input[type='number'],
+    input[type='date'],
+    input[type='tel'],
+    input[type='email'],
+    select { width: 400px; } } @media screen and (max-width: 670px) {
+    input[type='text'],
+    input[type='number'],
+    input[type='date'],
+    input[type='tel'],
+    input[type='email'],
+    select { width: calc(100% - 4px); } }
+  </style>
+
+</head>
+
+<body>
+  <h1>Claim Form</h1>
+
+  <form>
+    <div class="related">
+      <span>Name : <input type="text" id="cName" name="name" disabled></span>
+      <span>Initial : <input type="text" id="cInitial" name="initial" disabled></span>
+      <span>I/C Number : <input type="text" id="cIC" name="icNumber" disabled></span>
+      <span>Phone : <input type="tel" id="cPhone" name="phone" disabled></span>
+      <span>Reference : <input type="text" id="cRef" name="reference" disabled></span>
+    </div>
+
+    <div class="related">
+      <span><input type="text" id="cDate" name="date" disabled></span>
+      <span>Address : <textarea type="text" id="cAddress" name="address" rows="4" disabled></textarea></span>
+    </div>
+
+     <fieldset>
+       <legend>| 1. MILEAGE |</legend>
+       <p>Calculation : ___ km x RM ___ x ___ trip(s) x ___ day(s)</p>
+
+       <table id="milage-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+         <tr>
+           <td width="10%"><b>Date</b></td>
+           <td width="15%"><b>Client Name</b></td>
+           <td width="15%"><b>From (Full Address)</b></td>
+           <td width="15%"><b>To (Full Address)</b></td>
+           <td width="5%"><b>KM</b></td>
+           <td width="5%"><b>RM</b></td>
+           <td width="5%"><b>Trip</b></td>
+           <td width="5%"><b>Day</b></td>
+           <td width="10%"><b>Amount</b></td>
+         </tr>
+       </table>
+       <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+    </fieldset><br>
+
+    <fieldset>
+      <legend>| 2. OUTSTATION |</legend>
+
+      <table id="outstation-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+        <tr>
+          <td width="10%"><b>Date</b></td>
+          <td width="20%"><b>Client</b></td>
+          <td width="15%"><b>From</b></td>
+          <td width="15%"><b>To</b></td>
+          <td width="10%"><b>Amount</b></td>
+        </tr>
+      </table>
+      <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+   </fieldset><br>
+
+   <fieldset>
+     <legend>| 3. OTHERS |</legend>
+     <table id="others-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+       <tr>
+         <td width="10%"><b>Date</b></td>
+         <td width="20%"><b>Particulars</b></td>
+         <td width="10%"><b>Amount</b></td>
+       </tr>
+     </table>
+     <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+  </fieldset><br>
+
+  <fieldset>
+    <legend>| OVERALL TOTAL |</legend>
+      <span2>RM <input type="text" id="cTotal" name="name" disabled></span2>
+ </fieldset>
+
+         <p>Extra Information</p>
+         <textarea placeholder="State here..." rows="6" name="comments" id="exInfo"></textarea><br><br>
+
+         <script>
+
+         var idStaff;
+         var icStaff;
+         var nameStaff;
+         var phoneStaff;
+         var addressStaff;
+         var initialStaff;
+         var claimReference;
+         var claimDate;
+
+         function getUrlVars() {
+           var vars = {};
+           var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+             vars[key] = value;
+           });
+           return vars;
+         }
+         idStaff = getUrlVars()["idS"];
+         claimReference = getUrlVars()["refC"];
+
+         var dbRefDate = firebase.database().ref('/clist');
+         dbRefDate.once('value', function(snapshot){
+           snapshot.forEach(function(childSnapshot) {
+             var childKey = childSnapshot.key;
+             var childData = childSnapshot.val();
+
+             refC = childData.reference;
+
+             if(refC == claimReference){
+               claimDate  = childData.date;
+             }
+           });
+        document.getElementById("cDate").value = claimDate;
+        });
+
+
+
+
+         var databaseRef = firebase.database().ref('staff');
+
+         databaseRef.once('value', function(snapshot){
+           snapshot.forEach(function(childSnapshot) {
+             var childKey = childSnapshot.key;
+             var childData = childSnapshot.val();
+
+             icStaff = childData.icNumber;
+
+             if(icStaff == idStaff){
+               nameStaff  = childData.name;
+               phoneStaff  = childData.phone;
+               addressStaff  = childData.address;
+               initialStaff  = childData.initial;
+             }
+           });
+        document.getElementById("cName").value = nameStaff;
+        document.getElementById("cIC").value = idStaff;
+        document.getElementById("cPhone").value = phoneStaff;
+        document.getElementById("cAddress").value = addressStaff;
+        document.getElementById("cInitial").value = initialStaff;
+        document.getElementById("cRef").value = claimReference;
+
+        });
+
+
+        var tbm = document.getElementById('milage-table');
+        var rowIndex = 1;
+        var databaseRef = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/mileage');
+
+          databaseRef.once('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot) {
+              var childKey = childSnapshot.key;
+              var childData = childSnapshot.val();
+
+              var row = tbm.insertRow(rowIndex);
+              var cellDate = row.insertCell(0);
+              var cellCN = row.insertCell(1);
+              var cellFrom = row.insertCell(2);
+              var cellTo = row.insertCell(3);
+              var cellKM = row.insertCell(4);
+              var cellRM = row.insertCell(5);
+              var cellTrip = row.insertCell(6);
+              var cellDay = row.insertCell(7);
+              var cellAmount = row.insertCell(8);
+
+              cellDate.appendChild(document.createTextNode(childData.date));
+              cellCN.appendChild(document.createTextNode(childData.client_name));
+              cellFrom.appendChild(document.createTextNode(childData.from_a));
+              cellTo.appendChild(document.createTextNode(childData.to_a));
+              cellKM.appendChild(document.createTextNode(childData.km));
+              cellRM.appendChild(document.createTextNode(childData.rm));
+              cellTrip.appendChild(document.createTextNode(childData.trip));
+              cellDay.appendChild(document.createTextNode(childData.day));
+              var amntRM = 'RM' + childData.amount;
+              cellAmount.appendChild(document.createTextNode(amntRM));
+
+              rowIndex = rowIndex + 1;
+            });
+          });
+
+          var tbos = document.getElementById('outstation-table');
+          var rowIndex2 = 1;
+          var databaseRef2 = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/outstation');
+
+            databaseRef2.once('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot) {
+                var childKey = childSnapshot.key;
+                var childData = childSnapshot.val();
+
+                var row = tbos.insertRow(rowIndex2);
+                var cellDate = row.insertCell(0);
+                var cellClient = row.insertCell(1);
+                var cellFrom = row.insertCell(2);
+                var cellTo = row.insertCell(3);
+                var cellAmount = row.insertCell(4);
+
+                cellDate.appendChild(document.createTextNode(childData.date));
+                cellClient.appendChild(document.createTextNode(childData.client));
+                cellFrom.appendChild(document.createTextNode(childData.from));
+                cellTo.appendChild(document.createTextNode(childData.to));
+                var amntRM = 'RM' + childData.amount;
+                cellAmount.appendChild(document.createTextNode(amntRM));
+
+                rowIndex2 = rowIndex2 + 1;
+              });
+            });
+
+            var tbot = document.getElementById('others-table');
+            var rowIndex3 = 1;
+            var databaseRef3 = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/others');
+
+              databaseRef3.once('value', function(snapshot){
+              snapshot.forEach(function(childSnapshot) {
+                  var childKey = childSnapshot.key;
+                  var childData = childSnapshot.val();
+
+                  var row = tbot.insertRow(rowIndex3);
+                  var cellDate = row.insertCell(0);
+                  var cellParticulars = row.insertCell(1);
+                  var cellAmount = row.insertCell(2);
+
+                  cellDate.appendChild(document.createTextNode(childData.date));
+                  cellParticulars.appendChild(document.createTextNode(childData.particulars));
+                  var amntRM = 'RM' + childData.amount;
+                  cellAmount.appendChild(document.createTextNode(amntRM));
+
+                  rowIndex3 = rowIndex3 + 1;
+                });
+              });
+
+         </script>
+
+       </form>
+
+
+
+     </body>
+
+</html>

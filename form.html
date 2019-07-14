@@ -326,34 +326,7 @@
                 });
               });
 
-              function save_claim(){
-
-                var sdate = document.getElementById('fDate2').value;
-                var sclient = document.getElementById('fC2').value;
-                var sfrom = document.getElementById('fFrom2').value;
-                var sto = document.getElementById('fTo2').value;
-                var samount = document.getElementById('fAmount2').value;
-                var sID = document.getElementById('cIC').value;
-                var cRef = document.getElementById('cRef').value;
-                var rKey = firebase.database().ref('claim/'+ sID +'/'+ cRef +'/outstation').push().key;
-
-                 var data = {
-                   id: rKey,
-                   date: sdate,
-                   client: sclient,
-                   from: sfrom,
-                   to: sto,
-                   amount: samount
-                 }
-
-                 var updates = {};
-                 updates['/claim/'+ sID +'/'+ cRef +'/outstation/'+ rKey] = data;
-                 firebase.database().ref().update(updates);
-                 alert('Data added!');
-                 reload_page();
-               }
-
-               function save_claim_info(){
+              function save_claim_info(){
                    var s_id = document.getElementById('cIC').value;
                    var s_ref = document.getElementById('cRef').value;
                    var s_name = document.getElementById('cName').value;
