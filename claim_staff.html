@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<title>CMS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCEnT75xEO_ulN2mY7Q3BCFn-KC7ZOR6KY",
+    authDomain: "aftaas-d63e6.firebaseapp.com",
+    databaseURL: "https://aftaas-d63e6.firebaseio.com",
+    projectId: "aftaas-d63e6",
+    storageBucket: "",
+    messagingSenderId: "291293621730",
+  };
+  firebase.initializeApp(config);
+</script>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+<div class="w3-bar w3-black w3-card" id="myNavbar">
+  <!-- Right-sided navbar links -->
+  <div class="w3-right">
+    <a onclick="document.getElementById('id01').style.display='block'" class="w3-bar-item w3-button"><i class="fa fa-pencil-square-o"></i> REGISTER</a>
+    <a href="claim.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-file-text-o"></i> CLAIM</a>
+  </div>
+
+  </a>
+</div>
+</div>
+
+<body>
+
+<div class="w3-container w3-light w3-center" style="padding:80px 16px" id="training">
+  <img class="w3-image" src="images/af-par-4.jpg" alt="Logo" width="20%">
+  <h3><b>STAFF CLAIM LIST</b></h3>
+  <script>
+    var config = {
+      // ...
+    };
+    firebase.initializeApp(config);
+
+  </script>
+
+  <style>
+
+  th, td {
+      text-align: left;
+      padding: 8px;
+      color: black;
+  }
+
+  tr:nth-child(even){background-color: #f2f2f2}
+  </style>
+  </head>
+  <body>
+
+    <!-- Poster Table -->
+        <div class="w3-container">
+          <br>
+          <h2 class="w3-text-black" id="nStaff" style="text-align: left;">Staff</h2>
+
+          <table id="pt-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+            <tr>
+              <td width="20%"><b>Date</b></td>
+              <td width="20%"><b>Reference</b></td>
+              <td width="20%"><b>Amount</b></td>
+              <td width="10%"><b>Status</b></td>
+              <td width="10%"><b>View</b></td>
+
+            </tr>
+          </table>
+
+          <script>
+
+            var idStaff = window.location.href.split('?').pop();
+            var dbRedName = firebase.database().ref('staff');
+
+            var staffName;
+
+            dbRedName.once('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot) {
+                var childKey = childSnapshot.key;
+                var childData = childSnapshot.val();
+
+                var icStaff = childData.icNumber;
+
+                if(icStaff == idStaff){
+                  staffName  = childData.name;
+                }
+
+              });
+                nStaff.innerText = staffName;
+            });
+
+            var tbcs = document.getElementById('pt-table');
+            var rowIndex = 1;
+            var databaseRef = firebase.database().ref('clist');
+              databaseRef.once('value', function(snapshot){
+              snapshot.forEach(function(childSnapshot) {
+                  var childKey = childSnapshot.key;
+                  var childData = childSnapshot.val();
+
+                  var idDB = childData.id;
+
+                  if(idDB==idStaff){
+                    var row = tbcs.insertRow(rowIndex);
+                    var cellDate = row.insertCell(0);
+                    var cellRef = row.insertCell(1);
+                    var cellAmount = row.insertCell(2);
+                    var cellStatus = row.insertCell(3);
+                    var cellView = row.insertCell(4);
+
+                    cellDate.appendChild(document.createTextNode(childData.date));
+                    cellRef.appendChild(document.createTextNode(childData.reference));
+                    cellAmount.appendChild(document.createTextNode(childData.amount));
+                    cellStatus.appendChild(document.createTextNode(childData.status));
+
+                    var staffID = childData.id;
+                    var claimRef = childData.reference;
+
+                    var btn = document.createElement('input');
+                    btn.type = "button";
+                    btn.className = "btn";
+                    btn.value = "VIEW";
+                    btn.onclick = (function(staffID) {return function() {viewClaim(staffID,claimRef);}})(staffID,claimRef);
+                    cellView.appendChild(btn);
+                    rowIndex = rowIndex + 1;
+                  }
+
+                });
+              });
+
+              function viewClaim(staffID,claimRef) {
+                var value1=staffID;
+                var value2=claimRef;
+                var queryString = "?idS=" + value1 + "&refC=" + value2;
+                var url = 'form.html?'+ queryString;
+                window.open(url, '_blank').focus();
+
+              }
+
+              function reload_page(){
+               window.location.reload();
+              }
+        </script>
+
+        </div>
+      </div>
+        <br><br>
+
+
+
+
+
+</body>
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding">
+    <p>&copy; 2019<br>By Nuranisha</p>
+</footer>
+
+
+</html>

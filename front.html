@@ -117,7 +117,10 @@
                 });
               });
 
-              function viewClaim(staffInitial) {
+              function viewClaim(x) {
+                  var staffID = x;
+                  var url = 'claim_staff.html?'+ staffID;
+                  window.open(url, '_blank').focus();
 
               }
 
@@ -138,16 +141,30 @@
   /* Full-width input fields */
   input[type=text]{
       width: 100%;
-      padding: 12px 20px;
+      padding: 10px 20px;
       margin: 8px 0;
       display: inline-block;
       border: 1px solid #ccc;
       box-sizing: border-box;
   }
 
-  input[type=number]{
+  input[type=date]{
       padding: 10px 20px;
-      margin: 10px 0;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+  input[type=textN]{
+      padding: 10px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+  select{
+      padding: 10px 20px;
+      margin: 8px 0;
       display: inline-block;
       border: 1px solid #ccc;
       box-sizing: border-box;
@@ -263,15 +280,15 @@
        <label for="faddress"><b>ADDRESS</b></label>
        <input type="text" id="fAddress" placeholder="Enter address" name ="faddress" required>
        <label for="finitial"><b>INITIAL</b></label>
-       <input type="text" id="fInitial" placeholder="Enter initial" name="finitial" required><br>
+       <input type="textN" id="fInitial" placeholder="Enter initial" name="finitial" required><br>
        <label for="fic"><b>I/C Number</b></label>
-       <input type="text" id="fIC" placeholder="Enter I/C number" name="fic" required><br>
+       <input type="textN" id="fIC" placeholder="Enter I/C number" name="fic" required><br>
+       <label for="fphone"><b>Phone Number</b></label>
+       <input type="textN" id="fPhone" placeholder="Enter Phone number" name="fphone" required><br>
        <label for="fwdate"><b>Working Date</b></label>
        <input type="date" id="fWDate" placeholder="Select Date" name="fwdate" required><br>
-       <label for="fphone"><b>Phone Number</b></label>
-       <input type="text" id="fPhone" placeholder="Enter Phone number" name="fphone" required><br>
        <label for="fposition"><b>Position</b></label>
-       <select name = "fposition" id ="fPosition">
+       <select name="fposition" id ="fPosition">
             <option value = "Staff" selected>Staff</option>
             <option value = "Admin">Admin</option>
             <option value = "Manager">Manager</option>
@@ -295,8 +312,10 @@
     var swdate = document.getElementById('fWDate').value;
     var sphone = document.getElementById('fPhone').value;
     var sposition = document.getElementById('fPosition').value;
+    var idKey = firebase.database().ref('/staff').push().key;
 
      var data = {
+       id: idKey,
        name: sname,
        address: saddress,
        initial: sinitial,
@@ -307,14 +326,14 @@
      }
 
      var updates = {};
-     updates['/staff/'+ sic] = data;
+     updates['/staff/'+ idKey] = data;
      firebase.database().ref().update(updates);
      alert('Data successfully registered into the system!');
      reload_page();
    }
 
   function reload_page(){
-   window.location = 'front.html';
+   window.location.reload();
   }
 
   // Get the modal

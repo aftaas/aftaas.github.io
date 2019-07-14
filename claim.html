@@ -146,27 +146,64 @@ tr:nth-child(even){background-color: #f2f2f2}
           cellPhoneNo.appendChild(document.createTextNode(childData.phone));
 
           var staffID = childData.icNumber;
+          var staffName = childData.name;
 
           var btn = document.createElement('input');
           btn.type = "button";
           btn.className = "btn";
           btn.value = "CREATE";
-          btn.onclick = (function(staffID) {return function() {createClaim(staffID);}})(staffID);
+          btn.onclick = (function(staffID) {return function() {createClaim(staffID,staffName);}})(staffID,staffName);
           cellClaim.appendChild(btn);
 
           rowIndex = rowIndex + 1;
         });
       });
 
-      function createClaim(x) {
-          var value1=x;
+      function createClaim(id,name) {
+          var value1=id;
+          var value3=name;
           var date = new Date();
           var timestamp = date.getTime();
           var value2= 's_a_' + timestamp;
           var queryString = "?idS=" + value1 + "&refC=" + value2;
           var url = 'form.html?'+ queryString;
+          save_claim_list(value1,value2,value3);
           window.open(url, '_blank').focus();
+      }
 
+      function save_claim_list(value1,value2,value3){
+          var c_id = value1;
+          var c_ref = value2;
+          var c_name = value3;
+
+
+          var today = new Date();
+          var dd = String(today.getDate()).padStart(2, '0');
+          var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+          var mm = months[today.getMonth()];
+          var yyyy = today.getFullYear();
+          today = dd + '-' + mm + '-' + yyyy;
+
+          var c_amount = 0;
+          var c_status = 'not complete';
+
+
+           var data = {
+             id: c_id,
+             date: today,
+             name: c_name,
+             reference: c_ref,
+             amount: c_amount,
+             month : mm,
+             year : yyyy,
+             status: c_status
+           }
+
+           var updates = {};
+           updates['/clist/'+ c_ref] = data;
+           var databaseRef2 = firebase.database().ref().update(updates);
+           alert('Form created!');
+           reload_page();
       }
 
       function reload_page(){

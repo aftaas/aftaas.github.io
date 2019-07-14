@@ -39,6 +39,7 @@
     html { margin: 0; padding: 0; width: 100%; }
     form, body { margin-left: auto; margin-right: auto; max-width: 1000px; }
     span { display: block; margin: 5px 0; overflow: auto; padding: 0 1%; width: 98%; } .related { width: 50%; float: left; overflow: auto; }
+    span2 { float: right; display: block; margin: 5px 10px; padding: 0 1%;}
     fieldset { display: block; margin: 0; padding: 1%; width: calc(98% - 4px); border: 2px groove #bbb; }
     textarea { width: calc(100% - 14px); padding: 5px; border: 2px groove #bbb; }
     input, select, btn { float: right; }
@@ -71,15 +72,15 @@
   <form>
     <div class="related">
       <span>Name : <input type="text" id="cName" name="name" disabled></span>
+      <span>Initial : <input type="text" id="cInitial" name="initial" disabled></span>
       <span>I/C Number : <input type="text" id="cIC" name="icNumber" disabled></span>
       <span>Phone : <input type="tel" id="cPhone" name="phone" disabled></span>
+      <span>Reference : <input type="text" id="cRef" name="reference" disabled></span>
     </div>
 
     <div class="related">
-      <span>Address : <input type="text" id="cAddress" name="address" disabled></span>
-      <span>Initial : <input type="text" id="cInitial" name="initial" disabled></span>
-      <span>Date : <input type="text" id="cDate" name="date" disabled></span>
-      <span>Reference : <input type="text" id="cRef" name="reference" disabled></span>
+      <span><input type="text" id="cDate" name="date" disabled></span>
+      <span>Address : <textarea type="text" id="cAddress" name="address" rows="4" disabled></textarea></span>
     </div>
 
      <fieldset>
@@ -134,11 +135,16 @@
        </tr>
      </table>
      <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
-  </fieldset>
+  </fieldset><br>
+
+  <fieldset>
+    <legend>| OVERALL TOTAL |</legend>
+      <span2>RM <input type="text" id="cTotal" name="name" disabled></span2>
+ </fieldset>
 
          <p>Extra Information</p>
          <textarea placeholder="State here..." rows="6" name="comments"></textarea>
-         <span><input type="submit"></span>
+         <span><input type="submit" onclick="save_claim_info();"></span>
 
          <script>
 
@@ -149,6 +155,7 @@
          var addressStaff;
          var initialStaff;
          var claimReference;
+         var claimDate;
 
          function getUrlVars() {
            var vars = {};
@@ -160,13 +167,22 @@
          idStaff = getUrlVars()["idS"];
          claimReference = getUrlVars()["refC"];
 
+         var dbRefDate = firebase.database().ref('/clist');
+         dbRefDate.once('value', function(snapshot){
+           snapshot.forEach(function(childSnapshot) {
+             var childKey = childSnapshot.key;
+             var childData = childSnapshot.val();
 
-         var today = new Date();
-         var dd = String(today.getDate()).padStart(2, '0');
-         var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-         var mm = months[today.getMonth()];
-         var yyyy = today.getFullYear();
-         today = dd + '-' + mm + '-' + yyyy;
+             refC = childData.reference;
+
+             if(refC == claimReference){
+               claimDate  = childData.date;
+             }
+           });
+        document.getElementById("cDate").value = claimDate;
+        });
+
+
 
 
          var databaseRef = firebase.database().ref('staff');
@@ -190,9 +206,7 @@
         document.getElementById("cPhone").value = phoneStaff;
         document.getElementById("cAddress").value = addressStaff;
         document.getElementById("cInitial").value = initialStaff;
-        document.getElementById("cDate").value = today;
         document.getElementById("cRef").value = claimReference;
-        //pIBP.innerText = nameStaff;
 
         });
 
@@ -311,6 +325,76 @@
                   rowIndex3 = rowIndex3 + 1;
                 });
               });
+
+              function save_claim(){
+
+                var sdate = document.getElementById('fDate2').value;
+                var sclient = document.getElementById('fC2').value;
+                var sfrom = document.getElementById('fFrom2').value;
+                var sto = document.getElementById('fTo2').value;
+                var samount = document.getElementById('fAmount2').value;
+                var sID = document.getElementById('cIC').value;
+                var cRef = document.getElementById('cRef').value;
+                var rKey = firebase.database().ref('claim/'+ sID +'/'+ cRef +'/outstation').push().key;
+
+                 var data = {
+                   id: rKey,
+                   date: sdate,
+                   client: sclient,
+                   from: sfrom,
+                   to: sto,
+                   amount: samount
+                 }
+
+                 var updates = {};
+                 updates['/claim/'+ sID +'/'+ cRef +'/outstation/'+ rKey] = data;
+                 firebase.database().ref().update(updates);
+                 alert('Data added!');
+                 reload_page();
+               }
+
+               function save_claim_info(){
+                   var s_id = document.getElementById('cIC').value;
+                   var s_ref = document.getElementById('cRef').value;
+                   var s_name = document.getElementById('cName').value;
+                   var s_date = document.getElementById('cDate').value;
+                   var s_amount = document.getElementById('cTotal').value;
+                   var s_status = 'In Process';
+                   var s_month;
+                   var s_year;
+
+                   var dbRefOthers = firebase.database().ref('/clist');
+                   dbRefDate.once('value', function(snapshot){
+                     snapshot.forEach(function(childSnapshot) {
+                       var childKey = childSnapshot.key;
+                       var childData = childSnapshot.val();
+
+                       refC = childData.reference;
+
+                       if(refC == claimReference){
+                         s_month  = childData.month;
+                         s_year  = childData.year;
+                       }
+                     });
+                  });
+
+                    var data = {
+                      id: s_id,
+                      date: s_date,
+                      name: s_name,
+                      reference: s_ref,
+                      amount: s_amount,
+                      month : s_month,
+                      year : s_year,
+                      status: s_status
+                    }
+
+                    var updates = {};
+                    updates['/clist/'+ s_ref] = data;
+                    var dbRefClaim = firebase.database().ref().update(updates);
+                    alert('Form updated!');
+                    reload_page();
+               }
 
          </script>
 
