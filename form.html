@@ -45,7 +45,7 @@
     input, select, btn { float: right; }
     select { width: 162px; }
     input[type='checkbox'],
-    input[type='radio'] { float: left; margin-right: 10px; }
+    input[type='radio']{ float: left; margin-right: 10px; }
     input[type='submit'] { float: left; margin: 10px 0; padding: 10px 40px; }
     input[type='submit'],
     fieldset, textarea { border-radius: 5px; }
@@ -101,8 +101,8 @@
            <td width="10%"><b>Amount</b></td>
            <td width="5%"><b>Delete</b></td>
          </tr>
-       </table>
-       <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+       </table><br>
+       <span2>Sub Total : RM<input type="number" id="milage_total" name="mtotal" disabled></span2>
     </fieldset><br>
 
     <fieldset>
@@ -119,7 +119,8 @@
           <td width="5%"><b>Delete</b></td>
         </tr>
       </table>
-      <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+      <br>
+      <span2>Sub Total : RM<input type="number" id="outstation_total" name="ostotal" disabled></span2>
    </fieldset><br>
 
    <fieldset>
@@ -134,17 +135,17 @@
          <td width="5%"><b>Delete</b></td>
        </tr>
      </table>
-     <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+     <br>
+     <span2>Sub Total : RM<input type="number" id="others_total" name="ottotal" disabled></span2>
   </fieldset><br>
 
   <fieldset>
     <legend>| OVERALL TOTAL |</legend>
       <span2>RM <input type="text" id="cTotal" name="name" disabled></span2>
+      <btn onclick="calc_total();" style="width:auto;" type="btn" class="w3-button">TOTAL</btn>
  </fieldset>
 
-         <p>Extra Information</p>
-         <textarea placeholder="State here..." rows="6" name="comments"></textarea>
-         <span><input type="submit" onclick="save_claim_info();"></span>
+         <span><input type="submit" onclick="save_claim_info();"></span><br>
 
          <script>
 
@@ -156,6 +157,7 @@
          var initialStaff;
          var claimReference;
          var claimDate;
+         var claimTotal;
 
          function getUrlVars() {
            var vars = {};
@@ -177,13 +179,12 @@
 
              if(refC == claimReference){
                claimDate  = childData.date;
+               claimTotal  = childData.amount;
              }
            });
         document.getElementById("cDate").value = claimDate;
+        document.getElementById("cTotal").value = claimTotal;
         });
-
-
-
 
          var databaseRef = firebase.database().ref('staff');
 
@@ -211,6 +212,7 @@
         });
 
 
+        var sub_milalage = 0;
         var tbm = document.getElementById('milage-table');
         var rowIndex = 1;
         var databaseRef = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/mileage');
@@ -253,9 +255,12 @@
               cellDelete.appendChild(btn);
 
               rowIndex = rowIndex + 1;
+              sub_milalage = sub_milalage + childData.amount;
             });
+            document.getElementById("milage_total").value = sub_milalage;
           });
 
+          var sub_outstation = 0;
           var tbos = document.getElementById('outstation-table');
           var rowIndex2 = 1;
           var databaseRef2 = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/outstation');
@@ -290,9 +295,12 @@
                 cellDelete.appendChild(btn);
 
                 rowIndex2 = rowIndex2 + 1;
+                sub_outstation = sub_outstation + parseFloat(childData.amount);
               });
+              document.getElementById("outstation_total").value = sub_outstation;
             });
 
+            var sub_others = 0;
             var tbot = document.getElementById('others-table');
             var rowIndex3 = 1;
             var databaseRef3 = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/others');
@@ -323,15 +331,45 @@
                   cellDelete.appendChild(btn);
 
                   rowIndex3 = rowIndex3 + 1;
+                  sub_others = sub_others + parseFloat(childData.amount);
                 });
+                document.getElementById("others_total").value = sub_others;
               });
+
+              function deleteRow(x) {
+                  if(confirm('Are you sure?')){
+                      firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/mileage').child(x).remove();
+                      window.location.reload();
+                  }
+              }
+
+              function deleteRow2(y) {
+                  if(confirm('Are you sure?')){
+                      firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/outstation').child(y).remove();
+                      window.location.reload();
+                  }
+              }
+
+              function deleteRow3(z) {
+                  if(confirm('Are you sure?')){
+                      firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/others').child(z).remove();
+                      window.location.reload();
+                  }
+              }
+
+              var overall_total = 0;
+              function calc_total(){
+                overall_total = sub_milalage + sub_outstation + sub_others;
+                document.getElementById("cTotal").value = overall_total;
+              }
+
 
               function save_claim_info(){
                    var s_id = document.getElementById('cIC').value;
                    var s_ref = document.getElementById('cRef').value;
                    var s_name = document.getElementById('cName').value;
                    var s_date = document.getElementById('cDate').value;
-                   var s_amount = document.getElementById('cTotal').value;
+                   var s_amount = sub_milalage + sub_outstation + sub_others;
                    var s_status = 'In Process';
                    var s_month;
                    var s_year;
@@ -351,22 +389,25 @@
                      });
                   });
 
-                    var data = {
-                      id: s_id,
-                      date: s_date,
-                      name: s_name,
-                      reference: s_ref,
-                      amount: s_amount,
-                      month : s_month,
-                      year : s_year,
-                      status: s_status
-                    }
+                  if(confirm('Confirm submit form?')){
+                      var data = {
+                        id: s_id,
+                        date: s_date,
+                        name: s_name,
+                        reference: s_ref,
+                        amount: s_amount,
+                        month: s_month,
+                        year: s_year,
+                        status: s_status
+                      }
 
-                    var updates = {};
-                    updates['/clist/'+ s_ref] = data;
-                    var dbRefClaim = firebase.database().ref().update(updates);
-                    alert('Form updated!');
-                    reload_page();
+                      var updates = {};
+                      updates['/clist/'+ s_ref] = data;
+                      var dbRefClaim = firebase.database().ref().update(updates);
+                      alert('Form submitted!');
+                      reload_page();
+                  }
+
                }
 
          </script>
@@ -591,7 +632,6 @@
      var updates = {};
      updates['/claim/'+ sID +'/'+ cRef +'/mileage/'+ rKey] = data;
      var databaseRef2 = firebase.database().ref().update(updates);
-     alert('Data added!');
      reload_page();
    }
 
@@ -618,7 +658,6 @@
       var updates = {};
       updates['/claim/'+ sID +'/'+ cRef +'/outstation/'+ rKey] = data;
       firebase.database().ref().update(updates);
-      alert('Data added!');
       reload_page();
     }
 
@@ -641,7 +680,6 @@
        var updates = {};
        updates['/claim/'+ sID +'/'+ cRef +'/others/'+ rKey] = data;
        firebase.database().ref().update(updates);
-       alert('Data added!');
        reload_page();
      }
 

@@ -45,7 +45,7 @@
     input, select, btn { float: right; }
     select { width: 162px; }
     input[type='checkbox'],
-    input[type='radio'] { float: left; margin-right: 10px; }
+    input[type='radio']{ float: left; margin-right: 10px; }
     input[type='submit'] { float: left; margin: 10px 0; padding: 10px 40px; }
     input[type='submit'],
     fieldset, textarea { border-radius: 5px; }
@@ -85,7 +85,7 @@
 
      <fieldset>
        <legend>| 1. MILEAGE |</legend>
-       <p>Calculation : ___ km x RM ___ x ___ trip(s) x ___ day(s)</p>
+       <p>Calculation : ___ km x RM ___ x ___ trip(s) x ___ day(s) </p>
 
        <table id="milage-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
          <tr>
@@ -99,8 +99,8 @@
            <td width="5%"><b>Day</b></td>
            <td width="10%"><b>Amount</b></td>
          </tr>
-       </table>
-       <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+       </table><br>
+       <span2>Sub Total : RM<input type="number" id="milage_total" name="mtotal" disabled></span2>
     </fieldset><br>
 
     <fieldset>
@@ -115,11 +115,13 @@
           <td width="10%"><b>Amount</b></td>
         </tr>
       </table>
-      <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+      <br>
+      <span2>Sub Total : RM<input type="number" id="outstation_total" name="ostotal" disabled></span2>
    </fieldset><br>
 
    <fieldset>
      <legend>| 3. OTHERS |</legend>
+
      <table id="others-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
        <tr>
          <td width="10%"><b>Date</b></td>
@@ -127,16 +129,14 @@
          <td width="10%"><b>Amount</b></td>
        </tr>
      </table>
-     <btn onclick="" style="width:auto;" type="btn" class="w3-button"> SUB-TOTAL</btn>
+     <br>
+     <span2>Sub Total : RM<input type="number" id="others_total" name="ottotal" disabled></span2>
   </fieldset><br>
 
   <fieldset>
-    <legend>| OVERALL TOTAL |</legend>
-      <span2>RM <input type="text" id="cTotal" name="name" disabled></span2>
- </fieldset>
-
-         <p>Extra Information</p>
-         <textarea placeholder="State here..." rows="6" name="comments" id="exInfo"></textarea><br><br>
+    <legend>| GRAND TOTAL |</legend>
+      <span2>Total : RM<input type="number" id="cTotal" name="grand_total" disabled></span2>
+ </fieldset><br><br>
 
          <script>
 
@@ -148,6 +148,7 @@
          var initialStaff;
          var claimReference;
          var claimDate;
+         var claimTotal;
 
          function getUrlVars() {
            var vars = {};
@@ -169,13 +170,12 @@
 
              if(refC == claimReference){
                claimDate  = childData.date;
+               claimTotal  = childData.amount;
              }
            });
         document.getElementById("cDate").value = claimDate;
+        document.getElementById("cTotal").value = claimTotal;
         });
-
-
-
 
          var databaseRef = firebase.database().ref('staff');
 
@@ -203,6 +203,7 @@
         });
 
 
+        var sub_milalage = 0;
         var tbm = document.getElementById('milage-table');
         var rowIndex = 1;
         var databaseRef = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/mileage');
@@ -235,9 +236,12 @@
               cellAmount.appendChild(document.createTextNode(amntRM));
 
               rowIndex = rowIndex + 1;
+              sub_milalage = sub_milalage + childData.amount;
             });
+            document.getElementById("milage_total").value = sub_milalage;
           });
 
+          var sub_outstation = 0;
           var tbos = document.getElementById('outstation-table');
           var rowIndex2 = 1;
           var databaseRef2 = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/outstation');
@@ -262,9 +266,12 @@
                 cellAmount.appendChild(document.createTextNode(amntRM));
 
                 rowIndex2 = rowIndex2 + 1;
+                sub_outstation = sub_outstation + parseFloat(childData.amount);
               });
+              document.getElementById("outstation_total").value = sub_outstation;
             });
 
+            var sub_others = 0;
             var tbot = document.getElementById('others-table');
             var rowIndex3 = 1;
             var databaseRef3 = firebase.database().ref('/claim/'+ idStaff +'/'+ claimReference +'/others');
@@ -284,15 +291,19 @@
                   var amntRM = 'RM' + childData.amount;
                   cellAmount.appendChild(document.createTextNode(amntRM));
 
+                  var rowID = childData.id;
+
                   rowIndex3 = rowIndex3 + 1;
+                  sub_others = sub_others + parseFloat(childData.amount);
                 });
+                document.getElementById("others_total").value = sub_others;
               });
+
+
 
          </script>
 
        </form>
-
-
 
      </body>
 
