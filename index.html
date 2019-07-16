@@ -225,7 +225,7 @@ span.psw {
     background-color: #fefefe;
     margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 500px; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button (x) */
@@ -289,16 +289,12 @@ span.psw {
       </label>
     </div>
     <div class="container" style="background-color:#f1f1f1">
-      <button type="button" onclick="window.close();" class="cancelbtn">CANCEL</button>
+      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">CANCEL</button>
     </div>
   </form>
 </div>
 
 <script>
-function login(){
-  window.location = 'front.html';
-}
-
 // Get the modal
 var modal = document.getElementById('id01');
 
@@ -309,6 +305,8 @@ window.onclick = function(event) {
     }
 }
 </script>
+
+  <script src="log_in.js"></script>
 
 </body>
 
