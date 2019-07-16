@@ -406,7 +406,7 @@
                       updates['/clist/'+ s_ref] = data;
                       var dbRefClaim = firebase.database().ref().update(updates);
                       alert('Form submitted!');
-                      reload_page();
+                      window.close();
                   }
 
                }
