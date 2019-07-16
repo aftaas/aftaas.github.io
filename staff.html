@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<title>CMS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCEnT75xEO_ulN2mY7Q3BCFn-KC7ZOR6KY",
+    authDomain: "aftaas-d63e6.firebaseapp.com",
+    databaseURL: "https://aftaas-d63e6.firebaseio.com",
+    projectId: "aftaas-d63e6",
+    storageBucket: "",
+    messagingSenderId: "291293621730",
+  };
+  firebase.initializeApp(config);
+</script>
+
+<body>
+
+  <!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-black w3-wide w3-card" id="myNavbar">
+    <a href="front.html" class="w3-bar-item w3-button"><b>aftaas</b></a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right">
+      <a onclick="document.getElementById('id01').style.display='block'" class="w3-bar-item w3-button"><i class="fa fa-pencil-square-o"></i> REGISTER</a>
+      <a href="claim.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-file-text-o"></i> CLAIM</a>
+    </div>
+
+    </a>
+  </div>
+</div>
+
+  <div class="w3-container w3-light w3-center" style="padding:80px 16px" id="training">
+    <img class="w3-image" src="images/af-par-4.jpg" alt="Logo" width="20%">
+    <h2><b>STAFF LIST</b></h2>
+
+  <script>
+    var config = {
+      // ...
+    };
+    firebase.initializeApp(config);
+
+  </script>
+
+  <style>
+
+  th, td {
+      text-align: left;
+      padding: 8px;
+      color: black;
+  }
+
+  tr:nth-child(even){background-color: #f2f2f2}
+  </style>
+  </head>
+  <body>
+
+    <!-- Poster Table -->
+        <div class="w3-container">
+          <br>
+          <table id="pt-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+            <tr>
+              <td width="20%"><b>Name</b></td>
+              <td width="20%"><b>Address</b></td>
+              <td width="10%"><b>I/C No</b></td>
+              <td width="10%"><b>Initial</b></td>
+              <td width="10%"><b>Work Date</b></td>
+              <td width="10%"><b>Phone No</b></td>
+              <td width="10%"><b>Claim List</b></td>
+              <td width="5%"><b>Edit</b></td>
+              <td width="5%"><b>Delete</b></td>
+            </tr>
+          </table>
+
+          <script>
+
+            var tbp = document.getElementById('pt-table');
+            var rowIndex = 1;
+            var databaseRef = firebase.database().ref('staff');
+
+              databaseRef.once('value', function(snapshot){
+              snapshot.forEach(function(childSnapshot) {
+                  var childKey = childSnapshot.key;
+                  var childData = childSnapshot.val();
+
+                  var row = tbp.insertRow(rowIndex);
+                  var cellName = row.insertCell(0);
+                  var cellAddress = row.insertCell(1);
+                  var cellIC = row.insertCell(2);
+                  var cellInitial = row.insertCell(3);
+                  var cellWorkDate = row.insertCell(4);
+                  var cellPhoneNo = row.insertCell(5);
+                  var cellClaim = row.insertCell(6);
+                  var cellEdit = row.insertCell(7);
+                  var cellDelete = row.insertCell(8);
+
+                  cellName.appendChild(document.createTextNode(childData.name));
+                  cellAddress.appendChild(document.createTextNode(childData.address));
+                  cellIC.appendChild(document.createTextNode(childData.icNumber));
+                  cellInitial.appendChild(document.createTextNode(childData.initial));
+                  cellWorkDate.appendChild(document.createTextNode(childData.workingDate));
+                  cellPhoneNo.appendChild(document.createTextNode(childData.phone));
+
+                  var staffIC = childData.icNumber;
+
+                  var btn = document.createElement('input');
+                  btn.type = "button";
+                  btn.className = "btn";
+                  btn.value = "VIEW";
+                  btn.onclick = (function(staffIC) {return function() {viewClaim(staffIC);}})(staffIC);
+                  cellClaim.appendChild(btn);
+
+                  var staffID = childData.id;
+                  var staffAdd = childData.address;
+                  var staffInt = childData.initial;
+                  var staffNm = childData.name;
+                  var staffPh = childData.phone;
+                  var staffPs = childData.position;
+                  var staffWD = childData.workingDate;
+
+                  var btn2 = document.createElement('input');
+                  btn2.type = "button";
+                  btn2.className = "btn";
+                  btn2.value = "EDIT";
+                  btn2.onclick = (function(staffID) {return function() {editStaff(staffID,staffIC,staffAdd,staffInt,staffNm,staffPh,staffPs,staffWD);}})
+                            (staffID,staffIC,staffAdd,staffInt,staffNm,staffPh,staffPs,staffWD);
+                  cellEdit.appendChild(btn2);
+
+
+
+                  var btn3 = document.createElement('input');
+                  btn3.type = "button";
+                  btn3.className = "btn";
+                  btn3.value = "DELETE";
+                  btn3.onclick = (function(staffID) {return function() {deleteStaff(staffID);}})(staffID);
+                  cellDelete.appendChild(btn3);
+
+                  rowIndex = rowIndex + 1;
+                });
+              });
+
+              function viewClaim(x) {
+                  var staffID = x;
+                  var url = 'claim_staff.html?'+ staffID;
+                  window.open(url, '_blank').focus();
+
+              }
+
+              function editStaff(staffID,staffIC,staffAdd,staffInt,staffNm,staffPh,staffPs,staffWD) {
+                  document.getElementById('id02').style.display='block';
+
+                  document.getElementById('fNameE').value = staffNm;
+                  document.getElementById('fAddressE').value = staffAdd;
+                  document.getElementById('fInitialE').value = staffInt;
+                  document.getElementById('fICE').value = staffIC;
+                  document.getElementById('fWDateE').value = staffWD;
+                  document.getElementById('fPhoneE').value = staffPh;
+                  document.getElementById('fPositionE').value = staffPs;
+                  document.getElementById('fidKey').value = staffID;
+
+              }
+
+              function deleteStaff(z) {
+                  var staffID = z;
+                  if(confirm('Are you sure delete staff?')){
+                        firebase.database().ref("staff").child(staffID).remove();
+                        window.location.reload();
+                    }
+              }
+
+              function reload_page(){
+               window.location.reload();
+              }
+        </script>
+
+        </div>
+      </div>
+        <br><br>
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  body {font-family: Arial, Helvetica, sans-serif;}
+
+  /* Full-width input fields */
+  input[type=text]{
+      width: 100%;
+      padding: 10px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+
+  input[type=date]{
+      padding: 10px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+  input[type=textN], input[type=number] {
+      padding: 10px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+  select{
+      padding: 10px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+
+  /* Set a style for all buttons */
+  button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 18px;
+      margin: 0px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+  }
+
+  button:hover {
+      opacity: 0.8;
+  }
+
+  /* Extra styles for the cancel button */
+  .cancelbtn {
+      width: auto;
+      padding: 10px 18px;
+      background-color: #f44336;
+  }
+
+  /*the position the close button */
+  .container {
+      padding: 16px;
+  }
+
+  span.psw {
+      float: right;
+      padding-top: 16px;
+  }
+
+  /* The Modal (background) */
+  .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      padding-top: 50px;
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+      background-color: #fefefe;
+      margin: 0% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+      border: 1px solid #888;
+      width: 500px; /* Could be more or less, depending on screen size */
+  }
+
+  /* The Close Button (x) */
+  .close {
+      position: absolute;
+      right: 25px;
+      top: 0;
+      color: #000;
+      font-size: 35px;
+      font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+      color: red;
+      cursor: pointer;
+  }
+
+  /* Add Zoom Animation */
+  .animate {
+      -webkit-animation: animatezoom 0.6s;
+      animation: animatezoom 0.6s
+  }
+
+  @-webkit-keyframes animatezoom {
+      from {-webkit-transform: scale(0)}
+      to {-webkit-transform: scale(1)}
+  }
+
+  @keyframes animatezoom {
+      from {transform: scale(0)}
+      to {transform: scale(1)}
+  }
+
+  /* Change styles for span and cancel button on extra small screens */
+  @media screen and (max-width: 300px) {
+      span.psw {
+         display: block;
+         float: none;
+      }
+      .cancelbtn {
+         width: 100%;
+      }
+  }
+
+  </style>
+  </head>
+  <body>
+
+  <div id="id01" class="modal">
+    <form class="modal-content animate" size ="20">
+     <div class="container">
+       <label for="fname"><b>NAME</b></label><br>
+       <input type="text" id="fName" placeholder="Enter name" name ="fname" required>
+       <label for="faddress"><b>ADDRESS</b></label><br>
+       <input type="text" id="fAddress1" placeholder="Enter address" name ="faddress" required><br>
+       <input type="text" id="fAddress2" placeholder="..." name ="faddress2"><br>
+       <input type="textN" id="fAddress3" name="fAddress3" placeholder="Poskod"  minlength="5" maxlength="5" size="5" required>
+       <select name="fstate" id ="fState" required>
+            <option value="" disabled selected>Select state</option>
+            <option value = "Johor">Johor</option>
+            <option value = "Kedah">Kedah</option>
+            <option value = "Kelantan">Kelantan</option>
+            <option value = "Melaka">Melaka</option>
+            <option value = "Negeri Sembilan">Negeri Sembilan</option>
+            <option value = "Pahang">Pahang</option>
+            <option value = "Perak">Perak</option>
+            <option value = "Perlis">Perlis</option>
+            <option value = "Pulau Pinang">Pulau Pinang</option>
+            <option value = "Sabah">Sabah</option>
+            <option value = "Sarawak">Sarawak</option>
+            <option value = "Selangor">Selangor</option>
+            <option value = "Terengganu">Terengganu</option>
+       </select><br>
+       <label for="fic"><b>I/C NUMBER</b></label>
+       <input type="textN" id="fIC1" name="fic1" minlength="6" maxlength="6" size="6" required>-
+       <input type="textN" id="fIC2" name="fic2" minlength="2" maxlength="2" size="2"required>-
+       <input type="textN" id="fIC3" name="fic3" minlength="4" maxlength="4" size="4" required><br>
+       <label for="finitial"><b>INITIAL</b></label>
+       <input type="textN" id="fInitial" placeholder="Enter initial" name="finitial" required><br>
+       <label for="fphone"><b>PHONE NUMBER</b></label>
+       <input type="textN" id="fPhone1" placeholder="0.." name="fphone1" minlength="2" maxlength="3" size="3" required>-
+       <input type="textN" id="fPhone2" placeholder="" name="fphone2" minlength="7" maxlength="8" size="11" required><br>
+       <label for="fwdate"><b>WORKING DATE</b></label>
+       <input type="date" id="fWDate" placeholder="Select Date" name="fwdate" required><br>
+       <label for="fposition"><b>POSITION</b></label>
+       <select name="fposition" id ="fPosition" required>
+            <option value="" disabled selected>Select position</option>
+            <option value = "Staff">Staff</option>
+            <option value = "Admin">Admin</option>
+            <option value = "Manager">Manager</option>
+         </select><br>
+       <button type="button" onclick="save_info();">SUBMIT</button>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">CANCEL</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="id02" class="modal">
+    <form class="modal-content animate" size ="20">
+     <div class="container">
+       <label for="fname"><b>NAME</b></label><br>
+       <input type="text" id="fNameE" placeholder="Enter name" name ="fname" required>
+       <label for="faddress"><b>ADDRESS</b></label><br>
+       <input type="text" id="fAddressE" placeholder="Enter address" name ="faddress" required><br>
+       <label for="fic"><b>I/C NUMBER</b></label>
+       <input type="textN" id="fICE" name="ficE" placeholder="######-##-####" minlength="14" maxlength="14" size="15" required><br>
+       <label for="finitial"><b>INITIAL</b></label>
+       <input type="textN" id="fInitialE" placeholder="Enter initial" name="finitial" size="5" required><br>
+       <label for="fphone"><b>PHONE NUMBER</b></label>
+       <input type="textN" id="fPhoneE" placeholder="0.." name="fphone1" minlength="12" maxlength="13" size="12" required><br>
+       <label for="fwdate"><b>WORKING DATE</b></label>
+       <input type="date" id="fWDateE" placeholder="Select Date" name="fwdate" required><br>
+       <label for="fposition"><b>POSITION</b></label>
+       <select name="fposition" id ="fPositionE" required>
+            <option value="" disabled selected>Select position</option>
+            <option value = "Staff">Staff</option>
+            <option value = "Admin">Admin</option>
+            <option value = "Manager">Manager</option>
+         </select><br>
+       <button type="button" onclick="save_info2();">SUBMIT</button>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">CANCEL</button>
+         <input type="textN" id="fidKey" name="idKey" disabled><br>
+      </div>
+    </form>
+  </div>
+
+  <script>
+
+  function save_info(){
+    var sname = document.getElementById('fName').value;
+
+    var sadd1 = document.getElementById('fAddress1').value;
+    var sadd2 = document.getElementById('fAddress2').value;
+    var sadd3 = document.getElementById('fAddress3').value;
+    var sadd4 = document.getElementById('fState').value;
+    var saddress;
+    if (sadd2 === "") {
+        saddress = sadd1 +', '+ sadd3 +' ' + sadd4;
+    } else {
+        saddress = sadd1 +', '+ sadd2 +', '+ sadd3 +' ' + sadd4;
+    }
+
+
+    var sinitial = document.getElementById('fInitial').value;
+
+    var sic1 = document.getElementById('fIC1').value;
+    var sic2 = document.getElementById('fIC2').value;
+    var sic3 = document.getElementById('fIC3').value;
+    var sic = sic1 +'-'+ sic2+'-'+sic3;
+
+    var swdate = document.getElementById('fWDate').value;
+
+    var sphone1 = document.getElementById('fPhone1').value;
+    var sphone2 = document.getElementById('fPhone2').value;
+    var sphone = sphone1+'-'+sphone2;
+
+    var sposition = document.getElementById('fPosition').value;
+
+    var idKey = firebase.database().ref('/staff').push().key;
+
+     var data = {
+       id: idKey,
+       name: sname,
+       address: saddress,
+       initial: sinitial,
+       icNumber: sic,
+       workingDate: swdate,
+       phone: sphone,
+       position: sposition
+     }
+
+     var updates = {};
+     updates['/staff/'+ idKey] = data;
+     firebase.database().ref().update(updates);
+     alert('Data successfully registered into the system!');
+     reload_page();
+   }
+
+   function save_info2(){
+     var snameE = document.getElementById('fNameE').value;
+     var saddressE = document.getElementById('fAddressE').value;
+     var sinitialE = document.getElementById('fInitialE').value;
+     var sicE = document.getElementById('fICE').value;
+     var swdateE = document.getElementById('fWDateE').value;
+     var sphoneE = document.getElementById('fPhoneE').value;
+     var spositionE = document.getElementById('fPositionE').value;
+     var idKeyE = document.getElementById('fidKey').value;
+
+      var data2 = {
+        id: idKeyE,
+        name: snameE,
+        address: saddressE,
+        initial: sinitialE,
+        icNumber: sicE,
+        workingDate: swdateE,
+        phone: sphoneE,
+        position: spositionE
+      }
+
+      var updatesE = {};
+      updatesE['/staff/'+ idKeyE] = data2;
+      firebase.database().ref().update(updatesE);
+      alert('Data successfully update!');
+      reload_page();
+    }
+
+  function reload_page(){
+   window.location.reload();
+  }
+
+  // Get the modal
+  var modal = document.getElementById('id01');
+  var modal2 = document.getElementById('id02');
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
+  window.onclick = function(event) {
+      if (event.target == modal2) {
+          modal2.style.display = "none";
+      }
+  }
+  </script>
+
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding">
+    <p>&copy; 2019<br>By Nuranisha</p>
+</footer>
+
+</body>
+</html>

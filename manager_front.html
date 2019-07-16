@@ -29,10 +29,6 @@
   <div class="w3-bar w3-black w3-card" id="myNavbar">
     <a class="w3-bar-item w3-button"><b>aftaas</b></a>
     <!-- Right-sided navbar links -->
-    <div class="w3-right">
-      <a href="staff.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-users"></i> STAFF</a>
-      <a href="claim.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-file-text-o"></i> CLAIM</a>
-    </div>
 
     </a>
   </div>
@@ -69,12 +65,11 @@
           <table id="pt-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
             <tr>
               <td width="10%"><b>Date</b></td>
-              <td width="20%"><b>Name</b></td>
+              <td width="15%"><b>Name</b></td>
               <td width="20%"><b>Reference</b></td>
               <td width="20%"><b>Amount</b></td>
               <td width="10%"><b>Status</b></td>
               <td width="10%"><b>View</b></td>
-              <td width="10%"><b>Edit</b></td>
 
             </tr>
           </table>
@@ -91,7 +86,7 @@
 
                   var claim_status = childData.status;
 
-                  if(claim_status == 'IN PROCESS'|| claim_status == 'INCOMPLETE' || claim_status == 'DISAPPROVED' || claim_status == 'REVIEW'){
+                  if(claim_status == 'IN PROCESS'){
                     var row = tbcl.insertRow(rowIndex);
                     var cellDate = row.insertCell(0);
                     var cellName = row.insertCell(1);
@@ -99,7 +94,6 @@
                     var cellAmount = row.insertCell(3);
                     var cellStatus = row.insertCell(4);
                     var cellView = row.insertCell(5);
-                    var cellEdit = row.insertCell(6);
 
                     cellName.appendChild(document.createTextNode(childData.name));
                     cellDate.appendChild(document.createTextNode(childData.date));
@@ -117,13 +111,6 @@
                     btn.onclick = (function(staffID) {return function() {viewClaim(staffID,claimRef);}})(staffID,claimRef);
                     cellView.appendChild(btn);
 
-                    var btn2 = document.createElement('input');
-                    btn2.type = "button";
-                    btn2.className = "btn";
-                    btn2.value = "EDIT";
-                    btn2.onclick = (function(staffID) {return function() {editClaim(staffID,claimRef);}})(staffID,claimRef);
-                    cellEdit.appendChild(btn2);
-
                     rowIndex = rowIndex + 1;
                   }
 
@@ -134,15 +121,7 @@
                 var value1=staffID;
                 var value2=claimRef;
                 var queryString = "?idS=" + value1 + "&refC=" + value2;
-                var url = 'view_form.html?'+ queryString;
-                window.open(url, '_blank').focus();
-              }
-
-              function editClaim(staffID,claimRef) {
-                var value1=staffID;
-                var value2=claimRef;
-                var queryString = "?idS=" + value1 + "&refC=" + value2;
-                var url = 'form.html?'+ queryString;
+                var url = 'manager_form.html?'+ queryString;
                 window.open(url, '_blank').focus();
               }
 

@@ -141,12 +141,12 @@
   </fieldset><br>
 
   <fieldset>
-    <legend>| OVERALL TOTAL |</legend>
+    <legend>| GRAND TOTAL |</legend>
       <span2>RM <input type="text" id="cTotal" name="name" disabled></span2>
       <btn onclick="calc_total();" style="width:auto;" type="btn" class="w3-button">TOTAL</btn>
  </fieldset>
 
-         <span><input type="submit" onclick="save_claim_info();"></span><br>
+         <span><input type="submit" value="SUBMIT" onclick="save_claim_info();"></span><br>
 
          <script>
 
@@ -371,7 +371,7 @@
                    var s_name = document.getElementById('cName').value;
                    var s_date = document.getElementById('cDate').value;
                    var s_amount = sub_milalage + sub_outstation + sub_others;
-                   var s_status = 'In Process';
+                   var s_status = 'IN PROCESS';
                    var s_month;
                    var s_year;
 
@@ -701,12 +701,12 @@
   }
   window.onclick = function(event) {
       if (event.target == modal2) {
-          modal.style.display = "none";
+          modal2.style.display = "none";
       }
   }
   window.onclick = function(event) {
       if (event.target == modal3) {
-          modal.style.display = "none";
+          modal3.style.display = "none";
       }
   }
   </script>

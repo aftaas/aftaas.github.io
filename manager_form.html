@@ -42,11 +42,12 @@
     span2 { float: right; display: block; margin: 5px 10px; padding: 0 1%;}
     fieldset { display: block; margin: 0; padding: 1%; width: calc(98% - 4px); border: 2px groove #bbb; }
     textarea { width: calc(100% - 14px); padding: 5px; border: 2px groove #bbb; }
-    input, select, btn { float: right; }
+    input, btn { float: right; }
+    select { float: left; }
     select { width: 162px; }
     input[type='checkbox'],
     input[type='radio']{ float: left; margin-right: 10px; }
-    input[type='submit'] { float: left; margin: 5px 0; padding: 5px 20px; }
+    input[type='submit'] { float: right; margin: 10px 0; padding: 10px 40px; }
     input[type='submit'],
     fieldset, textarea { border-radius: 5px; }
      @media screen and (max-width: 760px) { .related { width: 100%; }
@@ -67,8 +68,7 @@
 </head>
 
 <body>
-  <img class="w3-image" src="images/aftaas.jpg" alt="Logo" width="15%"><br>
-  <input id="printpagebutton" type="submit" value="Print" onclick="printpage()"/>
+  <img class="w3-image" src="images/aftaas.jpg" alt="Logo" width="15%">
   <h2 align="center">Claim Form</h2>
 
   <form>
@@ -138,7 +138,22 @@
   <fieldset>
     <legend>| GRAND TOTAL |</legend>
       <span2>Total : RM<input type="number" id="cTotal" name="grand_total" disabled></span2>
- </fieldset><br><br>
+ </fieldset><br>
+
+ <fieldset>
+   <legend>| MANAGER APPROVAL |</legend>
+    <input id="mngApp" type="submit" value="SUBMIT" onclick="updateForm()" />
+   <br>
+    <select name="mapprove" id ="mApprove" required>
+        <option value="" disabled selected>Select...</option>
+        <option value = "APPROVE">APPROVE</option>
+        <option value = "DISAPPROVED">DISAPPROVED</option>
+        <option value = "REVIEW">REVIEW</option>
+     </select>
+
+
+
+</fieldset><br><br>
 
          <script>
 
@@ -301,6 +316,51 @@
                 document.getElementById("others_total").value = sub_others;
               });
 
+            function updateForm() {
+
+                var s_status = document.getElementById("mApprove").value;
+                var s_id = document.getElementById('cIC').value;
+                var s_ref = document.getElementById('cRef').value;
+                var s_name = document.getElementById('cName').value;
+                var s_date = document.getElementById('cDate').value;
+                var s_amount = document.getElementById('cTotal').value;
+                var s_month;
+                var s_year;
+
+                var dbRefOthers = firebase.database().ref('/clist');
+                dbRefDate.once('value', function(snapshot){
+                  snapshot.forEach(function(childSnapshot) {
+                    var childKey = childSnapshot.key;
+                    var childData = childSnapshot.val();
+
+                    refC = childData.reference;
+
+                    if(refC == claimReference){
+                      s_month  = childData.month;
+                      s_year  = childData.year;
+                    }
+                  });
+               });
+
+               if(confirm('Confirm submit?')){
+                   var data = {
+                     id: s_id,
+                     date: s_date,
+                     name: s_name,
+                     reference: s_ref,
+                     amount: s_amount,
+                     month: s_month,
+                     year: s_year,
+                     status: s_status
+                   }
+
+                   var updates = {};
+                   updates['/clist/'+ s_ref] = data;
+                   var dbRefClaim = firebase.database().ref().update(updates);
+                   window.close();
+               }
+            }
+
 
 
          </script>
@@ -308,22 +368,5 @@
        </form>
 
      </body>
-
-
-
-
-     <script type="text/javascript">
-       function printpage() {
-           //Get the print button and put it into a variable
-           var printButton = document.getElementById("printpagebutton");
-           //Set the print button visibility to 'hidden'
-           printButton.style.visibility = 'hidden';
-           //Print the page content
-           window.print()
-           //Set the print button to 'visible' again
-           //[Delete this line if you want it to stay hidden after printing]
-           printButton.style.visibility = 'visible';
-       }
-   </script>
 
 </html>
