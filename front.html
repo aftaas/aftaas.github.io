@@ -32,11 +32,20 @@
     <div class="w3-right">
       <a href="staff.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-users"></i> STAFF</a>
       <a href="claim.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-file-text-o"></i> CLAIM</a>
+      <a href="monthly.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-calendar"></i> MONTHLY</a>
+      <a onclick="logout();" class="w3-bar-item w3-button"><i class="fa fa-user-circle-o"></i> LOG OUT</a>
     </div>
 
     </a>
   </div>
 </div>
+
+<script>
+    function logout(){
+      firebase.auth().signOut();
+      window.location.href = 'index.html';
+    }
+  </script>
 
   <div class="w3-container w3-light w3-center" style="padding:80px 16px" id="training">
     <img class="w3-image" src="images/af-par-4.jpg" alt="Logo" width="20%">
@@ -75,6 +84,7 @@
               <td width="10%"><b>Status</b></td>
               <td width="10%"><b>View</b></td>
               <td width="10%"><b>Edit</b></td>
+              <td width="10%"><b>Delete</b></td>
 
             </tr>
           </table>
@@ -100,6 +110,7 @@
                     var cellStatus = row.insertCell(4);
                     var cellView = row.insertCell(5);
                     var cellEdit = row.insertCell(6);
+                    var cellDelete = row.insertCell(7);
 
                     cellName.appendChild(document.createTextNode(childData.name));
                     cellDate.appendChild(document.createTextNode(childData.date));
@@ -124,6 +135,13 @@
                     btn2.onclick = (function(staffID) {return function() {editClaim(staffID,claimRef);}})(staffID,claimRef);
                     cellEdit.appendChild(btn2);
 
+                    var btn3 = document.createElement('input');
+                    btn3.type = "button";
+                    btn3.className = "btn";
+                    btn3.value = "DELETE";
+                    btn3.onclick = (function(staffID) {return function() {deleteClaim(staffID,claimRef);}})(staffID,claimRef);
+                    cellDelete.appendChild(btn3);
+
                     rowIndex = rowIndex + 1;
                   }
 
@@ -144,6 +162,14 @@
                 var queryString = "?idS=" + value1 + "&refC=" + value2;
                 var url = 'form.html?'+ queryString;
                 window.open(url, '_blank').focus();
+              }
+
+              function deleteClaim(staffID,claimRef) {
+                if(confirm('Are you sure?')){
+                    firebase.database().ref('/clist').child(claimRef).remove();
+                    firebase.database().ref('/claim/' + staffID).child(claimRef).remove();
+                    window.location.reload();
+                }
               }
 
               function reload_page(){

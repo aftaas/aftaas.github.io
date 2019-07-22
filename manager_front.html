@@ -30,6 +30,17 @@
     <a class="w3-bar-item w3-button"><b>aftaas</b></a>
     <!-- Right-sided navbar links -->
 
+    <div class="w3-right">
+      <a onclick="logout();" class="w3-bar-item w3-button"><i class="fa fa-user-circle-o"></i> LOG OUT</a>
+    </div>
+
+    <script>
+        function logout(){
+          firebase.auth().signOut();
+          window.location.href = 'index.html';
+        }
+      </script>
+
     </a>
   </div>
 </div>

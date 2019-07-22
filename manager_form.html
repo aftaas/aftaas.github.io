@@ -327,6 +327,8 @@
                 var s_month;
                 var s_year;
 
+                alert(s_status);
+
                 var dbRefOthers = firebase.database().ref('/clist');
                 dbRefDate.once('value', function(snapshot){
                   snapshot.forEach(function(childSnapshot) {
