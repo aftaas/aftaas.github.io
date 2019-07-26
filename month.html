@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<title>CMS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCEnT75xEO_ulN2mY7Q3BCFn-KC7ZOR6KY",
+    authDomain: "aftaas-d63e6.firebaseapp.com",
+    databaseURL: "https://aftaas-d63e6.firebaseio.com",
+    projectId: "aftaas-d63e6",
+    storageBucket: "",
+    messagingSenderId: "291293621730",
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+  var config = {
+    // ...
+  };
+  firebase.initializeApp(config);
+
+</script>
+
+
+<head lang="en">
+
+  <style>
+    body, form, span, select, input, textarea { font-family: 'Open Sans', sans-serif; font-size: 14px; }
+    html { margin: 0; padding: 0; width: 100%; }
+    form, body { margin-left: auto; margin-right: auto; max-width: 1000px; }
+    span { display: block; margin: 5px 0; overflow: auto; padding: 0 1%; width: 98%; } .related { width: 50%; float: left; overflow: auto; }
+    span2 { float: right; display: block; margin: 5px 10px; padding: 0 1%;}
+    fieldset { display: block; margin: 0; padding: 1%; width: calc(98% - 4px); border: 2px groove #bbb; }
+    h3 { margin: 0; padding: 1%; width: calc(98% - 4px); }
+    textarea { width: calc(100% - 14px); padding: 5px; border: 2px groove #bbb; }
+    input, select, btn { float: right; }
+    select { width: 162px; }
+    input[type='checkbox'],
+    input[type='radio']{ float: left; margin-right: 10px; }
+    input[type='submit'] { float: left; margin: 5px 0; padding: 5px 20px; }
+    input[type='submit'],
+    fieldset, textarea { border-radius: 5px; }
+     @media screen and (max-width: 760px) { .related { width: 100%; }
+    input[type='text'],
+    input[type='number'],
+    input[type='date'],
+    input[type='tel'],
+    input[type='email'],
+    select { width: 400px; } } @media screen and (max-width: 670px) {
+    input[type='text'],
+    input[type='number'],
+    input[type='date'],
+    input[type='tel'],
+    input[type='email'],
+    select { width: calc(100% - 4px); } }
+  </style>
+
+</head>
+
+<body>
+  <img class="w3-image" src="images/aftaas.jpg" alt="Logo" width="15%"><br>
+  <input id="printpagebutton" type="submit" value="Print" onclick="printpage()"/>
+  <h2 align="center">Monthly Review</h2>
+  <h3 align="right" id="monthly">date</h3>
+
+  <form>
+
+     <fieldset>
+       <legend>|  LIST  |</legend>
+         <table id="pt-table" border="1" class="w3-table-all" >
+           <tr>
+             <td width="10%"><b>Date</b></td>
+             <td width="20%"><b>Name</b></td>
+             <td width="20%"><b>Reference</b></td>
+             <td width="20%"><b>Amount</b></td>
+             <td width="10%"><b>Status</b></td>
+             <td width="10%"><b>View</b></td>
+
+           </tr>
+         </table>
+    </fieldset><br>
+
+  <fieldset>
+    <legend>| GRAND TOTAL |</legend>
+      <span2>Total : RM<input type="number" id="cTotal" name="g_total" disabled></span2>
+ </fieldset><br><br>
+
+         <script>
+         function getUrlVars() {
+           var vars = {};
+           var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+             vars[key] = value;
+           });
+           return vars;
+         }
+         var claimMonth = getUrlVars()["month"];
+         var claimYear = getUrlVars()["year"];
+         var tTitle = claimMonth + "-" + claimYear;
+         monthly.innerText = tTitle;
+         var grand_total = 0;
+
+
+           var tbcl = document.getElementById('pt-table');
+           var rowIndex = 1;
+           var databaseRef = firebase.database().ref('clist');
+             databaseRef.once('value', function(snapshot){
+             snapshot.forEach(function(childSnapshot) {
+                 var childKey = childSnapshot.key;
+                 var childData = childSnapshot.val();
+
+                 var claim_year = childData.year;
+                 var claim_month = childData.month;
+                 var claim_status = childData.status;
+
+                 if (claim_year == claimYear){
+                   if(claim_month == claimMonth){
+                     if(claim_status == 'APPROVE'){
+                       var row = tbcl.insertRow(rowIndex);
+                       var cellDate = row.insertCell(0);
+                       var cellName = row.insertCell(1);
+                       var cellRef = row.insertCell(2);
+                       var cellAmount = row.insertCell(3);
+                       var cellStatus = row.insertCell(4);
+                       var cellView = row.insertCell(5);
+
+                       cellName.appendChild(document.createTextNode(childData.name));
+                       cellDate.appendChild(document.createTextNode(childData.date));
+                       cellRef.appendChild(document.createTextNode(childData.reference));
+                       cellAmount.appendChild(document.createTextNode(childData.amount));
+                       cellStatus.appendChild(document.createTextNode(childData.status));
+
+                       var staffID = childData.id;
+                       var claimRef = childData.reference;
+
+                       var btn = document.createElement('input');
+                       btn.type = "button";
+                       btn.className = "btn";
+                       btn.value = "VIEW";
+                       btn.onclick = (function(staffID) {return function() {viewClaim(staffID,claimRef);}})(staffID,claimRef);
+                       cellView.appendChild(btn);
+
+                       rowIndex = rowIndex + 1;
+                       grand_total = grand_total + parseFloat(childData.amount);
+                     }
+                   }
+                 }
+               });
+               document.getElementById("cTotal").value = grand_total;
+             });
+
+             function viewClaim(staffID,claimRef) {
+               var value1=staffID;
+               var value2=claimRef;
+               var queryString = "?idS=" + value1 + "&refC=" + value2;
+               var url = 'view_form.html?'+ queryString;
+               window.open(url, '_blank').focus();
+             }
+
+             function reload_page(){
+              window.location.reload();
+             }
+         </script>
+
+       </form>
+
+     </body>
+
+
+
+
+     <script type="text/javascript">
+       function printpage() {
+           //Get the print button and put it into a variable
+           var printButton = document.getElementById("printpagebutton");
+           //Set the print button visibility to 'hidden'
+           printButton.style.visibility = 'hidden';
+           //Print the page content
+           window.print()
+           //Set the print button to 'visible' again
+           //[Delete this line if you want it to stay hidden after printing]
+           printButton.style.visibility = 'visible';
+       }
+   </script>
+
+</html>

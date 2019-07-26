@@ -43,7 +43,7 @@
 </div>
 
 
-<div class="w3-container w3-light w3-center" style="padding:80px 16px" id="training">
+<div class="w3-container w3-light w3-center" style="padding:80px 10px" id="training">
   <img class="w3-image" src="images/af-par-4.jpg" alt="Logo" width="20%">
   <h3><b>MONTHLY REVIEW</b></h3>
 </div>
@@ -70,97 +70,170 @@
   tr:nth-child(even){background-color: #f2f2f2}
   </style>
   </head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  body {font-family: Arial, Helvetica, sans-serif;}
+
+  /* Full-width input fields */
+  input[type=text]{
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+  input[type=password]{
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+
+  input[type=number]{
+      padding: 10px 20px;
+      margin: 10px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+  }
+  select{
+      float: right;
+      padding: 12px 20px;
+      margin: 0px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      width: 73%;
+  }
+
+  /* Set a style for all buttons */
+  button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+  }
+
+  button:hover {
+      opacity: 0.8;
+  }
+
+  .container {
+      padding: 10px;
+  }
+
+  span { display: block;
+    margin: 16px 0;
+    overflow: auto;
+    padding: 0 1%;
+    width: 98%; }
+    .related {
+       width: 50%;
+       float: left;
+       overflow: auto; }
+  span.psw {
+      float: right;
+      padding-top: 16px;
+  }
+
+  /* The Modal (background) */
+  /* Modal Content/Box */
+  .modal-content {
+      background-color: #fefefe;
+      margin: 0% auto 5% auto; /* 5% from the top, 15% from the bottom and centered */
+      border: 3px solid #888;
+      width: 300px; /* Could be more or less, depending on screen size */
+  }
+
+  /* The Close Button (x) */
+  .close {
+      position: absolute;
+      right: 25px;
+      top: 0;
+      color: #000;
+      font-size: 35px;
+      font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+      color: red;
+      cursor: pointer;
+  }
+
+  /* Add Zoom Animation */
+  .animate {
+      -webkit-animation: animatezoom 0.6s;
+      animation: animatezoom 0.6s
+  }
+
+  @-webkit-keyframes animatezoom {
+      from {-webkit-transform: scale(0)}
+      to {-webkit-transform: scale(1)}
+  }
+
+  @keyframes animatezoom {
+      from {transform: scale(0)}
+      to {transform: scale(1)}
+  }
+
+  /* Change styles for span and cancel button on extra small screens */
+
+
+  </style>
   <body>
 
-    <!-- Table -->
-        <div class="w3-container">
-          <br>
-          <table id="pt-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
-            <tr>
-              <td width="10%"><b>Date</b></td>
-              <td width="20%"><b>Name</b></td>
-              <td width="20%"><b>Reference</b></td>
-              <td width="20%"><b>Amount</b></td>
-              <td width="10%"><b>Status</b></td>
-              <td width="10%"><b>View</b></td>
-
-            </tr>
-          </table>
-
-          <script>
-
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-            var mm = months[today.getMonth()];
-            var yyyy = today.getFullYear();
-
-            var tbcl = document.getElementById('pt-table');
-            var rowIndex = 1;
-            var databaseRef = firebase.database().ref('clist');
-              databaseRef.once('value', function(snapshot){
-              snapshot.forEach(function(childSnapshot) {
-                  var childKey = childSnapshot.key;
-                  var childData = childSnapshot.val();
-
-                  var claim_year = childData.year;
-                  var claim_month = childData.month;
-                  var claim_status = childData.status;
-
-                  if (claim_year == yyyy){
-                    if(claim_month == mm){
-                      if(claim_status == 'APPROVE'){
-                        var row = tbcl.insertRow(rowIndex);
-                        var cellDate = row.insertCell(0);
-                        var cellName = row.insertCell(1);
-                        var cellRef = row.insertCell(2);
-                        var cellAmount = row.insertCell(3);
-                        var cellStatus = row.insertCell(4);
-                        var cellView = row.insertCell(5);
-
-                        cellName.appendChild(document.createTextNode(childData.name));
-                        cellDate.appendChild(document.createTextNode(childData.date));
-                        cellRef.appendChild(document.createTextNode(childData.reference));
-                        cellAmount.appendChild(document.createTextNode(childData.amount));
-                        cellStatus.appendChild(document.createTextNode(childData.status));
-
-                        var staffID = childData.id;
-                        var claimRef = childData.reference;
-
-                        var btn = document.createElement('input');
-                        btn.type = "button";
-                        btn.className = "btn";
-                        btn.value = "VIEW";
-                        btn.onclick = (function(staffID) {return function() {viewClaim(staffID,claimRef);}})(staffID,claimRef);
-                        cellView.appendChild(btn);
-
-                        rowIndex = rowIndex + 1;
-                      }
-                    }
-                  }
-
-
-
-
-                });
-              });
-
-              function viewClaim(staffID,claimRef) {
-                var value1=staffID;
-                var value2=claimRef;
-                var queryString = "?idS=" + value1 + "&refC=" + value2;
-                var url = 'view_form.html?'+ queryString;
-                window.open(url, '_blank').focus();
-              }
-
-              function reload_page(){
-               window.location.reload();
-              }
-        </script>
-
+    <div id="id01" class="modal">
+      <form class="modal-content" action="admin.html">
+        <div class="container">
+          <span size="10"><b>MONTH :</b>
+            <select name="vehicle" id ="sMonth" required>
+              <option value="" disabled selected>Select Month</option>
+              <option value=January>January</option>
+              <option value=February>February</option>
+              <option value=March>March</option>
+              <option value=April>April</option>
+              <option value=May>May</option>
+              <option value=June>June</option>
+              <option value=July>July</option>
+              <option value=August>August</option>
+              <option value=September>September</option>
+              <option value=October>October</option>
+              <option value=November>November</option>
+              <option value=December>December</option>
+            </select>
+          </span>
+          <span><b>YEAR :</b>
+            <select name="vehicle" id ="sYear" required>
+              <option value="" disabled selected>Select Year</option>
+              <option value=2019>2019</option>
+              <option value=2020>2020</option>
+              <option value=2021>2021</option>
+            </select>
+          </span>
+          <button type="button" onclick="openMonth();" >VIEW</button>
         </div>
-      </div>
-        <br><br>
+      </form>
+    </div>
+    <script>
+
+    function openMonth() {
+        var month= document.getElementById("sMonth").value;
+        var year= document.getElementById("sYear").value;
+        var queryString = "?month=" + month + "&year=" + year;
+        var url = 'month.html?'+ queryString;
+        window.open(url, '_blank').focus();
+    }
+
+
+    </script>
 
 
 
