@@ -53,7 +53,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-.dropbtn {
+#searchButton {
   background-color: #4CAF50;
   color: white;
   padding: 16px;
@@ -62,22 +62,26 @@
   cursor: pointer;
 }
 
-.dropbtn:hover, .dropbtn:focus {
+#searchButton:hover, #searchButton:focus {
   background-color: #3e8e41;
 }
 
-#myInput {
+#searchInput {
   box-sizing: border-box;
-  background-image: url('searchicon.png');
   background-position: 14px 12px;
   background-repeat: no-repeat;
   font-size: 16px;
   padding: 14px 20px 12px 45px;
   border: none;
   border-bottom: 1px solid #ddd;
+  outline: 1px solid #ddd;
 }
 
 #myInput:focus {outline: 3px solid #ddd;}
+
+#sc-table{
+  display: none;
+}
 
 .dropdown {
   position: relative;
@@ -121,18 +125,25 @@ tr:nth-child(even){background-color: #f2f2f2}
     <img class="w3-image" src="images/aftaas.jpg" alt="Logo" width="150px">
     <h3><b>CLAIM FORM</b></h3>
 
-    <div class="dropdown">
-    <button onclick="myFunction()" class="dropbtn">SEARCH</button>
-    <div id="myDropdown" class="dropdown-content">
-      <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+    <div id="searcPanel">
+      <input type="text" placeholder="Search.." id="searchInput">
+      <button onclick="openTable()"class="fa fa-search" id="searchButton"></button>
     </div>
-  </div>
 </div>
 
 
 <div class="w3-container">
-  <br>
   <table id="pt-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
+    <tr>
+      <td width="20%"><b>Name</b></td>
+      <td width="20%"><b>I/C No</b></td>
+      <td width="10%"><b>Initial</b></td>
+      <td width="10%"><b>Phone No</b></td>
+      <td width="10%"><b>Claim</b></td>
+    </tr>
+  </table>
+
+  <table id="sc-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
     <tr>
       <td width="20%"><b>Name</b></td>
       <td width="20%"><b>I/C No</b></td>
@@ -228,6 +239,57 @@ tr:nth-child(even){background-color: #f2f2f2}
 
       function reload_page(){
        window.location.reload();
+      }
+
+      function openTable(){
+        var searchVal = document.getElementById("searchInput").value;
+        var x = document.getElementById("pt-table");
+        if (x.style.display === "block") {
+          x.style.display = "none";
+        } else {
+          x.style.display = "none";
+        }
+
+        var y = document.getElementById("sc-table").style.display = "block";
+        searchData(searchVal);
+
+      }
+
+      function searchData(searchVal){
+        var tb2 = document.getElementById("sc-table");
+        var rowIdx = 1;
+
+        var dbRef = firebase.database().ref("staff");
+        dbRef.orderByChild("initial").startAt(searchVal).endAt(searchVal + "\uf8ff").on("value", function(snapshot) {
+          snapshot.forEach(function(data) {
+            var childData = data.val();
+            //alert("The " + childData.name + " initial is " + childData.initial)
+
+            var row = tb2.insertRow(rowIdx);
+            var cellName = row.insertCell(0);
+            var cellIC = row.insertCell(1);
+            var cellInitial = row.insertCell(2);
+            var cellPhoneNo = row.insertCell(3);
+            var cellClaim = row.insertCell(4);
+
+            cellName.appendChild(document.createTextNode(childData.name));
+            cellIC.appendChild(document.createTextNode(childData.icNumber));
+            cellInitial.appendChild(document.createTextNode(childData.initial));
+            cellPhoneNo.appendChild(document.createTextNode(childData.phone));
+
+            var staffID = childData.icNumber;
+            var staffName = childData.name;
+
+            var btn = document.createElement('input');
+            btn.type = "button";
+            btn.className = "btn";
+            btn.value = "CREATE";
+            btn.onclick = (function(staffID) {return function() {createClaim(staffID,staffName);}})(staffID,staffName);
+            cellClaim.appendChild(btn);
+
+            rowIdx = rowIdx + 1;
+          });
+        });
       }
 </script>
 
