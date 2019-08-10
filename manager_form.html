@@ -142,7 +142,7 @@
 
  <fieldset>
    <legend>| MANAGER APPROVAL |</legend>
-    <input id="mngApp" type="submit" value="SUBMIT" onclick="updateForm()" />
+
    <br>
     <select name="mapprove" id ="mApprove" required>
         <option value="" disabled selected>Select...</option>
@@ -150,8 +150,11 @@
         <option value = "DISAPPROVED">DISAPPROVED</option>
         <option value = "REVIEW">REVIEW</option>
      </select>
+     <br><br>
+     <span>Comments<textarea type="text" id="mComments" name="manager_comment" rows = "3"
+       placeholder="Type comment here..."></textarea></span>
 
-
+     <input id="mngApp" type="submit" value="SUBMIT" onclick="updateForm()" />
 
 </fieldset><br><br>
 
@@ -253,7 +256,7 @@
               cellAmount.appendChild(document.createTextNode(amntRM));
 
               rowIndex = rowIndex + 1;
-              sub_milalage = sub_milalage + childData.amount;
+              sub_milalage = sub_milalage + parseFloat(childData.amount);
             });
             document.getElementById("milage_total").value = sub_milalage;
           });
@@ -324,6 +327,8 @@
                 var s_name = document.getElementById('cName').value;
                 var s_date = document.getElementById('cDate').value;
                 var s_amount = document.getElementById('cTotal').value;
+                var s_comment = document.getElementById('mComments').value;
+                alert(s_comment);
                 var s_month;
                 var s_year;
 
@@ -353,6 +358,7 @@
                      amount: s_amount,
                      month: s_month,
                      year: s_year,
+                     comment: s_comment,
                      status: s_status
                    }
 

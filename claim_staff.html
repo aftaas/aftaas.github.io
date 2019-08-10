@@ -74,6 +74,7 @@
               <td width="20%"><b>Amount</b></td>
               <td width="10%"><b>Status</b></td>
               <td width="10%"><b>View</b></td>
+              <td width="10%"><b>Others</b></td>
 
             </tr>
           </table>
@@ -117,6 +118,7 @@
                     var cellAmount = row.insertCell(2);
                     var cellStatus = row.insertCell(3);
                     var cellView = row.insertCell(4);
+                    var cellComs = row.insertCell(5);
 
                     cellDate.appendChild(document.createTextNode(childData.date));
                     cellRef.appendChild(document.createTextNode(childData.reference));
@@ -132,6 +134,18 @@
                     btn.value = "VIEW";
                     btn.onclick = (function(staffID) {return function() {viewClaim(staffID,claimRef);}})(staffID,claimRef);
                     cellView.appendChild(btn);
+
+                    var claimCom = childData.comment;
+                    if(claimCom != null){
+                      var btn4 = document.createElement('input');
+                      btn4.type = "button";
+                      btn4.className = "btn";
+                      btn4.value ="!";
+                      btn4.id = claimRef;
+                      btn4.onclick = (function(claimRef) {return function() {alertCom(claimCom,claimRef);}})(claimCom,claimRef);
+                      cellComs.appendChild(btn4);
+                    }
+
                     rowIndex = rowIndex + 1;
                   }
 
@@ -145,6 +159,10 @@
                 var url = 'view_form.html?'+ queryString;
                 window.open(url, '_blank').focus();
 
+              }
+
+              function alertCom(claimCom,claimRef) {
+                alert(claimCom);
               }
 
               function reload_page(){

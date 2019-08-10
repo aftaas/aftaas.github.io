@@ -127,22 +127,12 @@ tr:nth-child(even){background-color: #f2f2f2}
 
     <div id="searcPanel">
       <input type="text" placeholder="Search.." id="searchInput">
-      <button onclick="openTable()"class="fa fa-search" id="searchButton"></button>
+      <button onclick="showTable2()"class="fa fa-search" id="searchButton"></button>
     </div>
 </div>
 
 
 <div class="w3-container">
-  <table id="pt-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
-    <tr>
-      <td width="20%"><b>Name</b></td>
-      <td width="20%"><b>I/C No</b></td>
-      <td width="10%"><b>Initial</b></td>
-      <td width="10%"><b>Phone No</b></td>
-      <td width="10%"><b>Claim</b></td>
-    </tr>
-  </table>
-
   <table id="sc-table" border="1" class="w3-table-all w3-card-4 w3-light-grey" >
     <tr>
       <td width="20%"><b>Name</b></td>
@@ -154,41 +144,6 @@ tr:nth-child(even){background-color: #f2f2f2}
   </table>
 
   <script>
-
-    var tbp = document.getElementById('pt-table');
-    var rowIndex = 1;
-    var databaseRef = firebase.database().ref('staff');
-
-      databaseRef.once('value', function(snapshot){
-      snapshot.forEach(function(childSnapshot) {
-          var childKey = childSnapshot.key;
-          var childData = childSnapshot.val();
-
-          var row = tbp.insertRow(rowIndex);
-          var cellName = row.insertCell(0);
-          var cellIC = row.insertCell(1);
-          var cellInitial = row.insertCell(2);
-          var cellPhoneNo = row.insertCell(3);
-          var cellClaim = row.insertCell(4);
-
-          cellName.appendChild(document.createTextNode(childData.name));
-          cellIC.appendChild(document.createTextNode(childData.icNumber));
-          cellInitial.appendChild(document.createTextNode(childData.initial));
-          cellPhoneNo.appendChild(document.createTextNode(childData.phone));
-
-          var staffID = childData.icNumber;
-          var staffName = childData.name;
-
-          var btn = document.createElement('input');
-          btn.type = "button";
-          btn.className = "btn";
-          btn.value = "CREATE";
-          btn.onclick = (function(staffID) {return function() {createClaim(staffID,staffName);}})(staffID,staffName);
-          cellClaim.appendChild(btn);
-
-          rowIndex = rowIndex + 1;
-        });
-      });
 
       function createClaim(id,name) {
           var value1=id;
@@ -241,37 +196,57 @@ tr:nth-child(even){background-color: #f2f2f2}
        window.location.reload();
       }
 
-      function openTable(){
-        var searchVal = document.getElementById("searchInput").value;
-        var table1 = document.getElementById("pt-table");
-        if (table1.style.display === "block") {
-          table1.style.display = "none";
-        } else {
-          table1.style.display = "none";
-        }
+      function showTable(){
+        document.getElementById("sc-table").style.display = "block";
+        var tbp = document.getElementById('sc-table');
+        var rowIndex = 1;
+        var databaseRef = firebase.database().ref('staff');
 
-        var table2 = document.getElementById("sc-table");
-        table2.style.display = "block";
+          databaseRef.once('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot) {
+              var childKey = childSnapshot.key;
+              var childData = childSnapshot.val();
 
-        var tableRows = table2.getElementsByTagName('tr');
-        var rowCount = tableRows.length;
+              var row = tbp.insertRow(rowIndex);
+              var cellName = row.insertCell(0);
+              var cellIC = row.insertCell(1);
+              var cellInitial = row.insertCell(2);
+              var cellPhoneNo = row.insertCell(3);
+              var cellClaim = row.insertCell(4);
 
-        var rowCount = table2.rows.length;
-        while(--rowCount){
-          table2.deleteRow(rowCount);
-        }
-        searchData(searchVal);
+              cellName.appendChild(document.createTextNode(childData.name));
+              cellIC.appendChild(document.createTextNode(childData.icNumber));
+              cellInitial.appendChild(document.createTextNode(childData.initial));
+              cellPhoneNo.appendChild(document.createTextNode(childData.phone));
+
+              var staffID = childData.icNumber;
+              var staffName = childData.name;
+
+              var btn = document.createElement('input');
+              btn.type = "button";
+              btn.className = "btn";
+              btn.value = "CREATE";
+              btn.onclick = (function(staffID) {return function() {createClaim(staffID,staffName);}})(staffID,staffName);
+              cellClaim.appendChild(btn);
+
+              rowIndex = rowIndex + 1;
+            });
+          });
       }
 
-      function searchData(searchVal){
+      function showTable2(){
+        document.getElementById("sc-table").style.display = "block";
+
+        var searchVal = document.getElementById("searchInput").value;
+
         var tb2 = document.getElementById("sc-table");
         var rowIdx = 1;
 
         var dbRef = firebase.database().ref("staff");
-        dbRef.orderByChild("initial").startAt(searchVal).endAt(searchVal + "\uf8ff").on("value", function(snapshot) {
+        dbRef.orderByChild("initial").startAt(searchVal).on("value", function(snapshot) {
           snapshot.forEach(function(data) {
             var childData = data.val();
-            //alert("The " + childData.name + " initial is " + childData.initial)
+            //alert("The " + data.key + " initial is " + childData.initial)
 
             var row = tb2.insertRow(rowIdx);
             var cellName = row.insertCell(0);
@@ -297,6 +272,49 @@ tr:nth-child(even){background-color: #f2f2f2}
 
             rowIdx = rowIdx + 1;
           });
+        });
+
+      }
+
+      function hideTable(){
+        document.getElementById("sc-table").style.display = "block";
+
+        var searchVal = document.getElementById("searchInput").value;
+
+        var tb2 = document.getElementById("sc-table");
+        var rowIdx = 1;
+
+        // Find all dinosaurs that are at least three meters tall.
+        var ref = firebase.database().ref("staff");
+        ref.orderByChild("initial").startAt(searchVal).on("child_added", function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+                var childKey = childSnapshot.key;
+                var childData = childSnapshot.val();
+
+                var row = tb2.insertRow(rowIdx);
+                var cellName = row.insertCell(0);
+                var cellIC = row.insertCell(1);
+                var cellInitial = row.insertCell(2);
+                var cellPhoneNo = row.insertCell(3);
+                var cellClaim = row.insertCell(4);
+
+                cellName.appendChild(document.createTextNode(childData.name));
+                cellIC.appendChild(document.createTextNode(childData.icNumber));
+                cellInitial.appendChild(document.createTextNode(childData.initial));
+                cellPhoneNo.appendChild(document.createTextNode(childData.phone));
+
+                var staffID = childData.icNumber;
+                var staffName = childData.name;
+
+                var btn = document.createElement('input');
+                btn.type = "button";
+                btn.className = "btn";
+                btn.value = "CREATE";
+                btn.onclick = (function(staffID) {return function() {createClaim(staffID,staffName);}})(staffID,staffName);
+                cellClaim.appendChild(btn);
+
+                rowIdx = rowIdx + 1;
+              });
         });
       }
 </script>

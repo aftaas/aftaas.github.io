@@ -256,7 +256,7 @@
               cellDelete.appendChild(btn);
 
               rowIndex = rowIndex + 1;
-              sub_milalage = sub_milalage + childData.amount;
+              sub_milalage = sub_milalage + parseFloat(childData.amount);
             });
             document.getElementById("milage_total").value = sub_milalage;
           });

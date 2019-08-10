@@ -109,7 +109,7 @@
                     cellName.appendChild(document.createTextNode(childData.name));
                     cellDate.appendChild(document.createTextNode(childData.date));
                     cellRef.appendChild(document.createTextNode(childData.reference));
-                    cellAmount.appendChild(document.createTextNode(childData.amount));
+                    cellAmount.appendChild(document.createTextNode("RM"+childData.amount));
                     cellStatus.appendChild(document.createTextNode(childData.status));
 
                     var staffID = childData.id;
@@ -144,6 +144,12 @@
         </div>
       </div>
         <br><br>
+
+        <script type="text/javascript">
+            setTimeout(function () {
+              location.reload();
+            }, 60 * 1000);
+        </script>
 
 
 <!-- Footer -->

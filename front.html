@@ -27,7 +27,7 @@
   <!-- Navbar (sit on top) -->
 <div class="w3-top">
   <div class="w3-bar w3-black w3-card" id="myNavbar">
-    <a class="w3-bar-item w3-button"><b>aftaas</b></a>
+    <a href="front.html" class="w3-bar-item w3-button"><b>aftaas</b></a>
     <!-- Right-sided navbar links -->
     <div class="w3-right">
       <a href="staff.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-users"></i> STAFF</a>
@@ -80,11 +80,12 @@
               <td width="10%"><b>Date</b></td>
               <td width="20%"><b>Name</b></td>
               <td width="20%"><b>Reference</b></td>
-              <td width="20%"><b>Amount</b></td>
+              <td width="10%"><b>Amount</b></td>
               <td width="10%"><b>Status</b></td>
               <td width="10%"><b>View</b></td>
               <td width="10%"><b>Edit</b></td>
               <td width="10%"><b>Delete</b></td>
+              <td width="10%"><b>Others</b></td>
 
             </tr>
           </table>
@@ -111,11 +112,12 @@
                     var cellView = row.insertCell(5);
                     var cellEdit = row.insertCell(6);
                     var cellDelete = row.insertCell(7);
+                    var cellComs = row.insertCell(8);
 
                     cellName.appendChild(document.createTextNode(childData.name));
                     cellDate.appendChild(document.createTextNode(childData.date));
                     cellRef.appendChild(document.createTextNode(childData.reference));
-                    cellAmount.appendChild(document.createTextNode(childData.amount));
+                    cellAmount.appendChild(document.createTextNode("RM"+childData.amount));
                     cellStatus.appendChild(document.createTextNode(childData.status));
 
                     var staffID = childData.id;
@@ -141,6 +143,18 @@
                     btn3.value = "DELETE";
                     btn3.onclick = (function(staffID) {return function() {deleteClaim(staffID,claimRef);}})(staffID,claimRef);
                     cellDelete.appendChild(btn3);
+
+                    var claimCom = childData.comment;
+                    if(claimCom != null){
+                      var btn4 = document.createElement('input');
+                      btn4.type = "button";
+                      btn4.className = "btn";
+                      btn4.value ="!";
+                      btn4.id = claimRef;
+                      btn4.onclick = (function(claimRef) {return function() {alertCom(claimCom,claimRef);}})(claimCom,claimRef);
+                      cellComs.appendChild(btn4);
+                    }
+
 
                     rowIndex = rowIndex + 1;
                   }
@@ -171,6 +185,9 @@
                     window.location.reload();
                 }
               }
+              function alertCom(claimCom,claimRef) {
+                alert(claimCom);
+              }
 
               function reload_page(){
                window.location.reload();
@@ -180,6 +197,12 @@
         </div>
       </div>
         <br><br>
+
+        <script type="text/javascript">
+            setTimeout(function () {
+              location.reload();
+            }, 60 * 1000);
+        </script>
 
 
 <!-- Footer -->
