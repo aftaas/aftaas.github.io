@@ -152,7 +152,7 @@
      </select>
      <br><br>
      <span>Comments<textarea type="text" id="mComments" name="manager_comment" rows = "3"
-       placeholder="Type comment here..."></textarea></span>
+       placeholder="Type comment here..." required></textarea></span>
 
      <input id="mngApp" type="submit" value="SUBMIT" onclick="updateForm()" />
 
@@ -328,11 +328,8 @@
                 var s_date = document.getElementById('cDate').value;
                 var s_amount = document.getElementById('cTotal').value;
                 var s_comment = document.getElementById('mComments').value;
-                alert(s_comment);
                 var s_month;
                 var s_year;
-
-                alert(s_status);
 
                 var dbRefOthers = firebase.database().ref('/clist');
                 dbRefDate.once('value', function(snapshot){

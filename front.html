@@ -30,9 +30,9 @@
     <a href="front.html" class="w3-bar-item w3-button"><b>aftaas</b></a>
     <!-- Right-sided navbar links -->
     <div class="w3-right">
-      <a href="staff.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-users"></i> STAFF</a>
-      <a href="claim.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-file-text-o"></i> CLAIM</a>
-      <a href="monthly.html" target="_blank" class="w3-bar-item w3-button"><i class="fa fa-calendar"></i> MONTHLY</a>
+      <a href="staff.html" class="w3-bar-item w3-button"><i class="fa fa-users"></i> STAFF</a>
+      <a href="claim.html" class="w3-bar-item w3-button"><i class="fa fa-file-text-o"></i> CLAIM</a>
+      <a href="monthly.html" class="w3-bar-item w3-button"><i class="fa fa-calendar"></i> MONTHLY</a>
       <a onclick="logout();" class="w3-bar-item w3-button"><i class="fa fa-user-circle-o"></i> LOG OUT</a>
     </div>
 
@@ -102,7 +102,7 @@
 
                   var claim_status = childData.status;
 
-                  if(claim_status == 'IN PROCESS'|| claim_status == 'INCOMPLETE' || claim_status == 'DISAPPROVED' || claim_status == 'REVIEW'){
+                  if(claim_status == 'IN PROCESS'|| claim_status == 'INCOMPLETE' || claim_status == 'REVIEW'){
                     var row = tbcl.insertRow(rowIndex);
                     var cellDate = row.insertCell(0);
                     var cellName = row.insertCell(1);

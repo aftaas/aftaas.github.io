@@ -126,7 +126,7 @@ tr:nth-child(even){background-color: #f2f2f2}
     <h3><b>CLAIM FORM</b></h3>
 
     <div id="searcPanel">
-      <input type="text" placeholder="Search.." id="searchInput">
+      <input type="text" placeholder="Search.." id="searchInput" style="text-transform:uppercase" >
       <button onclick="openTable()"class="fa fa-search" id="searchButton"></button>
     </div>
 </div>
@@ -306,35 +306,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 
-</head>
-<body>
-
-
-      <br><br>
-
-  <script>
-/* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
-
-function filterFunction() {
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("myDropdown");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
-  }
-}
-</script>
 
 
 </body>

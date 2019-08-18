@@ -224,6 +224,15 @@
     </div>
     <script>
 
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var mm = months[today.getMonth()];
+    var yyyy = today.getFullYear();
+
+    document.getElementById('sMonth').value = mm;
+    document.getElementById('sYear').value = yyyy;
+
     function openMonth() {
         var month= document.getElementById("sMonth").value;
         var year= document.getElementById("sYear").value;
